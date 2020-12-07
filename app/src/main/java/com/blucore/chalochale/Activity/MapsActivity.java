@@ -99,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
         }
 
-        // Setting onclick event listener for the map
+      /*  // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -120,10 +120,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Setting the position of the marker
                 options.position(point);
 
-                /**
+                *//**
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
-                 */
+                 *//*
                 if (points.size() == 1) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 } else if (points.size() == 2) {
@@ -154,7 +154,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-
+*/
 
     }
 

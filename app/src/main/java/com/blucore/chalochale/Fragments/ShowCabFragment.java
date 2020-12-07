@@ -32,12 +32,14 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -90,7 +92,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                 .findFragmentById(R.id.cab_map);
         mapFragment.getMapAsync(this);
 
-
         if(mGPS.canGetLocation()){
             mGPS.getLocation();
             latitute= mGPS.getLatitude();
@@ -134,7 +135,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-       // new DirectionFinder(this,source,destination);
+
 
         return view;
     }
@@ -588,6 +589,28 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+      /*  LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(latitute);
+        builder.include(longitute);
+        LatLngBounds bounds = builder.build();
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 20));
+*/
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+//the include method will calculate the min and max bound.
+        builder.include(latitute);
+        builder.include(longitute);
+        LatLngBounds bounds = builder.build();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+        mMap.animateCamera(cu);
+
         LatLng lng = new LatLng(latitute, longitute);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lng, 18));
         originMarkers.add(mMap.addMarker(new MarkerOptions()
@@ -636,6 +659,23 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
+
+       /* LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+//the include method will calculate the min and max bound.
+        builder.include(marker1.getPosition());
+        builder.include(marker2.getPosition());
+
+        LatLngBounds bounds = builder.build();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+
+        mMap.animateCamera(cu);*/
+
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
