@@ -1,7 +1,11 @@
 package com.blucore.chalochale.extra;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
 
+import com.blucore.chalochale.Fragments.DashboardFragment;
+import com.blucore.chalochale.Fragments.DirectionFinderListener;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -24,14 +28,22 @@ public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_API_KEY = "AIzaSyADxV6qHEQ1L6w3qLckcn5gFc5UmWa4k2w";
     private DirectionFinderListener listener;
-    private String origin;
+    private String source;
     private String destination;
 
-    public DirectionFinder(DirectionFinderListener listener, String origin, String destination) {
+    public DirectionFinder(DirectionFinderListener listener, String source, String destination) {
         this.listener = listener;
-        this.origin = origin;
+        this.source = source;
         this.destination = destination;
     }
+
+
+    /*public DirectionFinder(DirectionFinderListener listener, String sSource, String sDestination) {
+        this.listener = listener;
+        this.source = sSource;
+        this.destination = sDestination;
+
+    }*/
 
     public void execute() throws UnsupportedEncodingException {
         listener.onDirectionFinderStart();
@@ -39,8 +51,10 @@ public class DirectionFinder {
     }
 
     private String createUrl() throws UnsupportedEncodingException {
-        String urlOrigin = URLEncoder.encode(origin, "utf-8");
+        String urlOrigin = URLEncoder.encode(source, "utf-8");
         String urlDestination = URLEncoder.encode(destination, "utf-8");
+
+        Log.e("origin","source"+urlOrigin);
 
         return DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
     }

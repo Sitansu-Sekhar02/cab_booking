@@ -1,17 +1,11 @@
 package com.blucore.chalochale.Fragments;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,19 +16,17 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blucore.chalochale.Activity.DirectionsJSONParser;
 import com.blucore.chalochale.Activity.GPSTracker;
 import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.Adapter.CabListAadapter;
 import com.blucore.chalochale.R;
-import com.blucore.chalochale.extra.DirectionFinderListener;
-import com.google.android.gms.common.ConnectionResult;
+import com.blucore.chalochale.extra.DirectionFinder;
+import com.blucore.chalochale.extra.Route;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
@@ -48,29 +40,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import static com.blucore.chalochale.Activity.MainActivity.tvHeaderText;
-import static com.blucore.chalochale.Activity.MapsActivity.MY_PERMISSIONS_REQUEST_LOCATION;
 
-public class ShowCabFragment extends Fragment implements OnMapReadyCallback, LocationListener,GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class ShowCabFragment extends Fragment implements OnMapReadyCallback, DirectionFinderListener {
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
@@ -81,12 +61,14 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
-    private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyADxV6qHEQ1L6w3qLckcn5gFc5UmWa4k2w";
-    private DirectionFinderListener listener;
-    private String sSource;
-    private String sDestination;
 
+
+
+    private List<Marker> originMarkers = new ArrayList<>();
+    private List<Marker> destinationMarkers = new ArrayList<>();
+    private List<Polyline> polylinePaths = new ArrayList<>();
+    private ProgressDialog progressDialog;
+    Double latitute,longitute;
 
     Button confirmRide;
 
@@ -101,12 +83,22 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
         view = inflater.inflate(R.layout.show_cabs, container, false);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        fetchLocation();
+        //fetchLocation();
         GPSTracker mGPS = new GPSTracker(getActivity());
         MainActivity.iv_menu.setImageResource(R.drawable.ic_back);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.cab_map);
+        mapFragment.getMapAsync(this);
 
 
+        if(mGPS.canGetLocation()){
+            mGPS.getLocation();
+            latitute= mGPS.getLatitude();
+            longitute=mGPS.getLongitude();
 
+        }else{
+            System.out.println("Unable");
+        }
         tvHeaderText.setVisibility(View.GONE);
         MainActivity.iv_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,12 +128,18 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
         Bundle b=getArguments();
         String source=b.getString("source");
         String destination=b.getString("destination");
-        DisplayRout(source,destination);
+        Log.e("source",""+source);
+        try {
+            new DirectionFinder(this, source, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+       // new DirectionFinder(this,source,destination);
 
         return view;
     }
 
-    private String DisplayRout(String source, String destination) {
+  /*  private String DisplayRout(String source, String destination) {
 
         // Origin of route
         String str_origin = "origin=" + source.latitude + "," + source.longitude;
@@ -166,7 +164,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
         return url;
 
-       /* try {
+       *//* try {
             Uri uri = Uri.parse("https://maps.googleapis.com/maps/api/directions/" + source + "/" + destination);
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.setPackage("com.google.android.apps.maps");
@@ -177,7 +175,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }*/
+        }*//*
 
 
     }
@@ -246,10 +244,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
                 // Setting the position of the marker
                 options.position(point);
 
-                /**
+                *//**
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
-                 */
+                 *//*
                 if (points.size() == 1) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 } else if (points.size() == 2) {
@@ -308,9 +306,9 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
 
     }
 
-    /**
+    *//**
      * A method to download json data from url
-     */
+     *//*
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
@@ -380,9 +378,9 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
         }
     }
 
-    /**
+    *//**
      * A class to parse the Google Places in JSON format
-     */
+     *//*
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
@@ -578,6 +576,93 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Loc
         transaction.replace(R.id.main_fragment_container, fragment);
         transaction.commit();
     }
+*/
+
+    public void replaceFragmentWithAnimation(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.commit();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        LatLng lng = new LatLng(latitute, longitute);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lng, 18));
+        originMarkers.add(mMap.addMarker(new MarkerOptions()
+                .title("")
+                .position(lng)));
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+    }
+    @Override
+    public void onDirectionFinderStart() {
+        progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
+                "Finding direction..!", true);
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline:polylinePaths ) {
+                polyline.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+        progressDialog.dismiss();
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        for (Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+
+
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .title(route.endAddress)
+                    .position(route.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLACK).
+                    width(10);
+
+            for (int i = 0; i < route.points.size(); i++)
+                polylineOptions.add(route.points.get(i));
+             Log.e("marker",""+polylineOptions);
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+        }
+    }
+
 
 }
 

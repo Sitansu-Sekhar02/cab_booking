@@ -43,6 +43,8 @@ import com.blucore.chalochale.Activity.MapsActivity;
 import com.blucore.chalochale.Activity.Utils;
 import com.blucore.chalochale.Adapter.AutoCompleteTextview;
 import com.blucore.chalochale.R;
+import com.blucore.chalochale.extra.DirectionFinder;
+import com.blucore.chalochale.extra.Route;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
@@ -98,12 +100,13 @@ import static android.app.Activity.RESULT_OK;
 import static com.blucore.chalochale.Activity.MapsActivity.MY_PERMISSIONS_REQUEST_LOCATION;
 
 
-public class DashboardFragment extends Fragment implements OnMapReadyCallback,  GoogleApiClient.ConnectionCallbacks,
+public class DashboardFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,DirectionFinderListener {
 
     private String api_key="AIzaSyC7-ZAGF_-ya8rVIpTb04-MKIUUhQ8iXgw";
     EditText pickLocation,dropLocation;
+    Button btn;
     private GoogleMap mMap;
     Button ride_now;
     Double latitute,longitute;
@@ -142,13 +145,15 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback,  
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        ProgressForMain();
+
 
 
         //getCompleteAddressString();
         GPSTracker mGPS = new GPSTracker(getActivity());
         pickLocation=view.findViewById(R.id.mymLocation);
         dropLocation=view.findViewById(R.id.dropoffLocation);
+        btn=view.findViewById(R.id.path);
+
         ride_now=view.findViewById(R.id.ride_now);
 
         //pickLocation.setFocusable(false);
@@ -164,17 +169,36 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback,  
              pickLocation.setText("Unable to Find Location");
              System.out.println("Unable");
         }
+       /* btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendRequest();
+            }
+        });*/
 
         ride_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String sSource=pickLocation.getText().toString();
                 String sDestination=dropLocation.getText().toString();
-                //sendRequest();
+               /* //sendRequest();
+                if (sSource.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (sDestination.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                try {
+                    new DirectionFinder(this, sSource, sDestination).execute();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }*/
 
                 if (Utils.isNetworkConnectedMainThred(getActivity())) {
-                    replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
+                     replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
 
                 } else {
 
@@ -201,11 +225,32 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback,  
                 List<Place.Field> fieldList=Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,Place.Field.NAME);
                 Intent intent=new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fieldList).build(getActivity());
                 startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODE);
+
             }
         });
 
 
         return view;
+    }
+
+    private void sendRequest() {
+
+        String source = pickLocation.getText().toString();
+        String destination = dropLocation.getText().toString();
+        if (source.isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (destination.isEmpty()) {
+            Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            new DirectionFinder(this, source, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -292,6 +337,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback,  
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        ProgressForMain();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.getUiSettings().setZoomControlsEnabled(true);
@@ -432,6 +479,64 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback,  
         }
         return data;
     }
+
+    @Override
+    public void onDirectionFinderStart() {
+       /* progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
+                "Finding direction..!", true);*/
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline:polylinePaths ) {
+                polyline.remove();
+            }
+        }
+
+
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> route) {
+       // progressDialog.dismiss();
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+        for (Route rout : route) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rout.startLocation, 16));
+
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .title(rout.startAddress)
+                    .position(rout.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .title(rout.endAddress)
+                    .position(rout.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLACK).
+                    width(10);
+
+            for (int i = 0; i < rout.points.size(); i++)
+                polylineOptions.add(rout.points.get(i));
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+        }
+    }
+
 
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {
