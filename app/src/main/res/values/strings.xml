@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Chalo Chale Cab</string>
+    <string name="navigation_drawer_open">Open navigation drawe</string>
+    <string name="navigation_drawer_close">Close navigation drawe</string>
+    <string name="verification_code">Verify OTP</string>
+    <string name="map_key" translatable="false">AIzaSyDCcC5AZsRfJtE6Yspv8DBWww8i7IdE1QQ</string>
+    <string name="direction_key" translatable="false">AIzaSyADxV6qHEQ1L6w3qLckcn5gFc5UmWa4k2w</string>
+
+    <string name="invalid_PhoneNumber">Please enter valid mobile number</string>
+    <string name="auto">Auto</string>
+    <string name="Confirm_Cab">Confirm  Ride</string>
+    <string name="Sedan">Sedan</string>
+    <string name="Mini">Mini</string>
+    <string name="don_t_have_an_account">Don\'t have account ?</string>
+</resources>

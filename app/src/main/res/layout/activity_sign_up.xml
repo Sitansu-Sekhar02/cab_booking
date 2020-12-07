@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/walllogo">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/_20sdp"
+            android:layout_height="match_parent">
+
+
+                <ImageView
+                    android:layout_width="@dimen/_200sdp"
+                    android:visibility="gone"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_marginBottom="@dimen/_30sdp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/cabText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_6sdp"
+                    android:textSize="@dimen/_18sdp"
+                    android:padding="@dimen/_4sdp"
+                    android:text="Explore new ways to travel with Chalo chale cab."
+                    android:textColor="#505EB1"
+                    android:layout_marginRight="@dimen/_5sdp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/editTextfirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/shapeesign"
+                android:drawableLeft="@drawable/ic_baseline_person_24"
+                android:drawablePadding="@dimen/_5sdp"
+                android:inputType="text"
+                android:hint="First name"
+                android:padding="@dimen/_8sdp" />
+
+            <EditText
+                android:id="@+id/editTextLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/shapeesign"
+                android:drawableLeft="@drawable/ic_baseline_person_last_24"
+                android:drawablePadding="@dimen/_5sdp"
+                android:inputType="text"
+                android:hint="Last name"
+                android:padding="@dimen/_8sdp" />
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/shapeemail"
+                android:inputType="textEmailAddress"
+                android:drawableLeft="@drawable/ic_baseline_email_24"
+                android:drawablePadding="@dimen/_5sdp"
+                android:hint="Email(optional)"
+                android:padding="@dimen/_10sdp" />
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/shapeesign"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_baseline_lock_24"
+                android:drawablePadding="@dimen/_5sdp"
+                android:hint="Password"
+                android:padding="@dimen/_10sdp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:visibility="gone"
+                android:orientation="horizontal">
+                <CheckBox
+                    android:id="@+id/checkbox"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:gravity="center_vertical"
+                    android:textColor="#121111"
+                    android:text="I have read terms and Conditions."
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:drawablePadding="@dimen/_6sdp"
+                    android:gravity="end"
+                    android:textSize="@dimen/_14sdp"
+                    android:padding="@dimen/_4sdp"
+                    android:text="Forget Password?"
+                    android:textColor="#051DBA"
+                    android:layout_marginRight="@dimen/_5sdp" />
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/buttonSignup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/shapesignup"
+                android:padding="@dimen/_15sdp"
+                android:shadowColor="@android:color/transparent"
+                android:text="Submit"
+                android:textColor="#ffffff" />
+            <Button
+                android:id="@+id/buttonLogin"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/shapelogin"
+                android:padding="@dimen/_15sdp"
+                android:shadowColor="@android:color/transparent"
+                android:text="Log In" />
+            </LinearLayout>
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

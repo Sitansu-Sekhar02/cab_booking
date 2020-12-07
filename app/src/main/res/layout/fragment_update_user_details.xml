@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_below="@+id/llHeader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+            <RelativeLayout
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FirstName*"
+                    android:textSize="@dimen/_12sdp" />
+
+                <EditText
+                    android:layout_below="@+id/tv5"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:hint="Your first name"
+                    android:singleLine="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@null"
+                    android:id="@+id/edfirstName"
+                    />
+
+                <View
+                    android:layout_below="@+id/edfirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LastName*"
+                    android:textSize="@dimen/_12sdp"
+                    />
+                <EditText
+                    android:layout_below="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:hint="Your last name"
+                    android:singleLine="true"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@null"
+                    android:id="@+id/edlastName"
+                    />
+                <View
+                    android:layout_below="@+id/edlastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:background="#039BE5"
+                android:text="Save Details"
+                android:textAlignment="center"
+                android:layout_margin="@dimen/_20sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp"
+                tools:ignore="RtlCompat" />
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

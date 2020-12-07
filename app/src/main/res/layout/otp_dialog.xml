@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_trans"
+    android:gravity="center_horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/_15sdp"
+        android:layout_gravity="center"
+        android:background="#4398C6"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="end"
+            android:background="@drawable/cross"
+            android:layout_marginRight="@dimen/_5sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/verification_code"
+            android:textColor="#F8F5F5"
+            android:textSize="@dimen/_24sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter 4 digit OTP send on your Registered mobile number"
+            android:textAlignment="center"
+            android:textSize="@dimen/_14sdp"
+            android:textColor="#ffffff"
+            tools:ignore="RtlCompat" />
+
+            <in.aabhasjindal.otptextview.OtpTextView
+                android:id="@+id/otp_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:bar_active_color="#ffff"
+                app:bar_enabled="true"
+                app:bar_error_color="@color/red"
+                app:bar_height="1.5dp"
+                app:bar_inactive_color="#ffff"
+                app:bar_margin_bottom="0dp"
+                app:bar_margin_left="2dp"
+                app:bar_margin_right="2dp"
+                app:box_margin="0dp"
+                android:layout_gravity="center"
+                app:height="40dp"
+                app:hide_otp="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:length="4"
+                app:otp=""
+                app:otp_text_size="20dp"
+                app:width="40dp" />
+
+            <Button
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_gravity="center"
+                android:background="@drawable/verifyshape"
+                android:text="Varify" />
+        <TextView
+            android:id="@+id/validate_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/_25sdp"
+            android:layout_marginRight="@dimen/_25sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:background="@drawable/verifyshape"
+
+            android:contentDescription="@null"
+            android:paddingHorizontal="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="Verify OTP"
+            android:textAllCaps="true"
+            android:textColor="#000"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
+
+    </LinearLayout>
