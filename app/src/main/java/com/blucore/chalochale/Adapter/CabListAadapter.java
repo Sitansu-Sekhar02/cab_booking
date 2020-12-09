@@ -11,13 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blucore.chalochale.Model.CabBookingModel;
 import com.blucore.chalochale.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CabListAadapter extends  RecyclerView.Adapter<CabListAadapter.ViewHolder> {
     ArrayList cabNames;
+    private List<CabBookingModel> mModel;
     Context context;
     public CabListAadapter(Context context, ArrayList cabNames) {
         this.context = context;
@@ -33,6 +36,11 @@ public class CabListAadapter extends  RecyclerView.Adapter<CabListAadapter.ViewH
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.Cabname.setText(cabNames.get(position).toString());
+        /*Glide.with(context)
+                .load(mModel.get(position).getCab_image())
+                .into(holder.Cabimage);
+        holder.CabTime.setText(mModel.get(position).getCab_time());
+        holder.CabPrice.setText(mModel.get(position).getCab_price());*/
 
     }
 

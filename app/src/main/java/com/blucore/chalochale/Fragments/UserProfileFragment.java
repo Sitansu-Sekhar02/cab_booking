@@ -46,9 +46,6 @@ public class UserProfileFragment extends Fragment  {
     Preferences preferences;
     TextView tvChange;
 
-
-
-
     View view;
 
     @Nullable
