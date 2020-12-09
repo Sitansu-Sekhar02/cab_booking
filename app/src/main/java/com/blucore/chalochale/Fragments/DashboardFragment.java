@@ -111,6 +111,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     Button ride_now;
     Double latitute,longitute;
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private static int AUTOCOMPLETE_REQUEST_CODEE = 2;
+
+
 
     String TAG = "placeautocomplete";
 
@@ -163,7 +166,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
              pickLocation.setText("Lat"+mGPS.getLatitude()+"Lon"+mGPS.getLongitude());
              latitute= mGPS.getLatitude();
              longitute=mGPS.getLongitude();
-            pickLocation.setText(getCompleteAddressString());
+             pickLocation.setText(getCompleteAddressString());
 
         }else{
              pickLocation.setText("Unable to Find Location");
@@ -224,7 +227,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             public void onClick(View view) {
                 List<Place.Field> fieldList=Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,Place.Field.NAME);
                 Intent intent=new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fieldList).build(getActivity());
-                startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODE);
+                startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODEE);
 
             }
         });
@@ -270,7 +273,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+
+
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODEE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 ride_now.setVisibility(View.VISIBLE);
@@ -284,6 +289,23 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 // The user canceled the operation.
             }
             return;
+        }else if (requestCode == AUTOCOMPLETE_REQUEST_CODE){
+
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                //ride_now.setVisibility(View.VISIBLE);
+                //pickLocation.clearComposingText();
+                pickLocation.setText(place.getAddress());
+                Log.e("TAG", "Place: " + place.getName() + ", " + place.getId());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+
         }
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -357,7 +379,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             mMap.setMyLocationEnabled(true);
         }
 
-        // Setting onclick event listener for the map
+      /*  // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -378,10 +400,10 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 // Setting the position of the marker
                 options.position(point);
 
-                /**
+                *//**
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
-                 */
+                 *//*
                 if (points.size() == 1) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 } else if (points.size() == 2) {
@@ -410,7 +432,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 }
 
             }
-        });
+        });*/
 
     }
     private String getUrl(LatLng origin, LatLng dest) {
@@ -581,7 +603,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             JSONObject jObject;
             List<List<HashMap<String, String>>> routes = null;
 
-            try {
+           /* try {
                 jObject = new JSONObject(jsonData[0]);
                 Log.d("ParserTask", jsonData[0].toString());
                 DirectionsJSONParser parser = new DirectionsJSONParser();
@@ -595,7 +617,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             } catch (Exception e) {
                 Log.d("ParserTask", e.toString());
                 e.printStackTrace();
-            }
+            }*/
             return routes;
         }
 
@@ -605,7 +627,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
 
-            // Traversing through all the routes
+           /* // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<>();
                 lineOptions = new PolylineOptions();
@@ -637,7 +659,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 mMap.addPolyline(lineOptions);
             } else {
                 Log.d("onPostExecute", "without Polylines drawn");
-            }
+            }*/
         }
     }
 
@@ -730,7 +752,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
 
 
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Hari");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Your Location");
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));

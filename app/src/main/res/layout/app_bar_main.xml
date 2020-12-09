@@ -9,7 +9,6 @@
 
     <RelativeLayout
         android:id="@+id/rr_header"
-        android:background="#02FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp">
 
@@ -43,7 +42,7 @@
             android:gravity="center_vertical"
             android:text=""
             android:textColor="@color/black"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:visibility="visible" />
 
