@@ -6,7 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -58,6 +61,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -112,23 +116,14 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     Double latitute,longitute;
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
     private static int AUTOCOMPLETE_REQUEST_CODEE = 2;
-
-
-
     String TAG = "placeautocomplete";
-
     //private GoogleMap mMap;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
-    ArrayList<LatLng> points;
     Dialog dialog;
-    private List<Marker> originMarkers = new ArrayList<>();
-    private List<Marker> destinationMarkers = new ArrayList<>();
-    private List<Polyline> polylinePaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
 
 
 
@@ -184,29 +179,33 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             public void onClick(View view) {
                 String sSource=pickLocation.getText().toString();
                 String sDestination=dropLocation.getText().toString();
-               /* //sendRequest();
+                //sendRequest();
                 if (sSource.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                if (sDestination.isEmpty()) {
+                }else if (sDestination.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter destination address!", Toast.LENGTH_SHORT).show();
                     return;
+                }else{
+
+                    if (Utils.isNetworkConnectedMainThred(getActivity())) {
+                        replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
+
+                    } else {
+
+                        Toasty.error(getActivity(),"No Internet Connection!", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
-                try {
-                    new DirectionFinder(this, sSource, sDestination).execute();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }*/
 
-                if (Utils.isNetworkConnectedMainThred(getActivity())) {
+               /* if (Utils.isNetworkConnectedMainThred(getActivity())) {
                      replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
 
                 } else {
 
                     Toasty.error(getActivity(),"No Internet Connection!", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
             }
         });
@@ -366,6 +365,20 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
+
+        ArrayList<LatLng> locations = new ArrayList();
+        locations.add(new LatLng(latitute, longitute ));
+        locations.add(new LatLng(18.589823, 73.745099));
+        locations.add(new LatLng(18.592375, 73.745153));
+        locations.add(new LatLng(18.591051, 73.751255));
+
+
+        for(LatLng location : locations){
+            mMap.addMarker(new MarkerOptions()
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_local_taxi_24))
+                    .position(location)
+                    .title("available taxi"));
+        }
         //Initialize Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
@@ -435,9 +448,17 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         });*/
 
     }
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
     private String getUrl(LatLng origin, LatLng dest) {
 
-        // Origin of route
+       /* // Origin of route
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
 
         // Destination of route
@@ -455,17 +476,17 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
         // Building the url to the web service
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+*/
 
 
-        return url;
-
+        return null;
     }
 
     /**
      * A method to download json data from url
      */
     private String downloadUrl(String strUrl) throws IOException {
-        String data = "";
+       /* String data = "";
         InputStream iStream = null;
         HttpURLConnection urlConnection = null;
         try {
@@ -498,8 +519,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         } finally {
             iStream.close();
             urlConnection.disconnect();
-        }
-        return data;
+        }*/
+        //return data;
+        return strUrl;
     }
 
     @Override
@@ -507,7 +529,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
        /* progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
                 "Finding direction..!", true);*/
 
-        if (originMarkers != null) {
+       /* if (originMarkers != null) {
             for (Marker marker : originMarkers) {
                 marker.remove();
             }
@@ -525,13 +547,13 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             }
         }
 
-
+*/
     }
 
     @Override
     public void onDirectionFinderSuccess(List<Route> route) {
        // progressDialog.dismiss();
-        polylinePaths = new ArrayList<>();
+       /* polylinePaths = new ArrayList<>();
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
 
@@ -556,7 +578,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 polylineOptions.add(rout.points.get(i));
 
             polylinePaths.add(mMap.addPolyline(polylineOptions));
-        }
+        }*/
     }
 
 

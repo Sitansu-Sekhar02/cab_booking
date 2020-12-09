@@ -298,8 +298,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
             int width = getResources().getDisplayMetrics().widthPixels;
             int height = getResources().getDisplayMetrics().heightPixels;
-            int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
-
+            int padding = (int) (width * 0.30); // offset from edges of the map 10% of screen
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
 
             mMap.animateCamera(cu);

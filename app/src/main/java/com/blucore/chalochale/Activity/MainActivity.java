@@ -32,6 +32,7 @@ import com.blucore.chalochale.Fragments.AboutUsFragment;
 import com.blucore.chalochale.Fragments.DashboardFragment;
 import com.blucore.chalochale.Fragments.SupportFragment;
 import com.blucore.chalochale.Fragments.UserProfileFragment;
+import com.blucore.chalochale.Fragments.YourRidingFragment;
 import com.blucore.chalochale.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -125,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
         if (id == R.id.nav_profile) {
             replaceFragmentWithAnimation( new UserProfileFragment());
         } else if (id == R.id.nav_rides) {
+            replaceFragmentWithAnimation( new YourRidingFragment());
 
         }
         else if (id == R.id.nav_support) {
