@@ -15,10 +15,14 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -75,6 +79,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     LocationRequest mLocationRequest;
     Location mLastLocation;
     Marker mCurrLocationMarker;
+
+    private GoogleMap gglmap;
+    private MarkerOptions options = new MarkerOptions();
+    private ArrayList<LatLng> latlngs = new ArrayList<>();
 
 
     private List<Marker> originMarkers = new ArrayList<>();
@@ -192,35 +200,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-       /* LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        LatLng origin = new LatLng(latitute,longitute);
-        Log.e("origin",""+origin);
-
-        LatLng dest = new LatLng(longt,lati);
-        Log.e("dest",""+dest);
-*/
-
-
-
-//the include method will calculate the min and max bound.
-        /*builder.include(origin);
-        builder.include(dest);
-        LatLngBounds bounds = builder.build();
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
-
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-        mMap.animateCamera(cu);
-
-
-        LatLng lng = new LatLng(latitute, longitute);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lng, 18));
-        originMarkers.add(mMap.addMarker(new MarkerOptions()
-                .title("")
-                .position(lng)));*/
-
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -255,8 +234,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                 polyline.remove();
             }
         }
-
-
     }
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
@@ -274,32 +251,24 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
 
-
-       /* LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-//the include method will calculate the min and max bound.
-        builder.include(marker1.getPosition());
-        builder.include(marker2.getPosition());
-
-        LatLngBounds bounds = builder.build();
-
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.10); // offset from edges of the map 10% of screen
-
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-
-        mMap.animateCamera(cu);*/
+        ArrayList<LatLng> locations = new ArrayList();
+        locations.add(new LatLng(18.591867, 73.746418 ));
+        locations.add(new LatLng(18.589823, 73.745099));
+        locations.add(new LatLng(18.592375, 73.745153));
+        locations.add(new LatLng(18.591051, 73.751255));
 
 
+        for(LatLng location : locations){
+            mMap.addMarker(new MarkerOptions()
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_local_taxi_24))
+                    .position(location)
+                    .title("available taxi"));
+        }
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
 
-           // Bitmap tempBMP = BitmapFactory.decodeResource(getResources(),R.drawable.ic_baseline_local_taxi_24);
-
-
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_local_taxi_24))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_taxi_black))
                     .title(route.startAddress)
                     .position(route.startLocation)));
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
@@ -318,11 +287,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             polylinePaths.add(mMap.addPolyline(polylineOptions));
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//the include method will calculate the min and max bound.
 
             LatLng origin = new LatLng(latitute,longitute);
             Log.e("origin",""+origin);
-            LatLng dest = new LatLng(18.568279920687598, 73.91413851204486);
+            LatLng dest = new LatLng(18.524283810720306, 73.85738833581495);
             Log.e("dest",""+dest);
             builder.include(origin);
             builder.include(dest);
@@ -340,6 +308,52 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
 
     }
+    private double bearingBetweenLocations(LatLng latLng1,LatLng latLng2) {
+
+        double PI = 3.14159;
+        double lat1 = latLng1.latitude * PI / 180;
+        double long1 = latLng1.longitude * PI / 180;
+        double lat2 = latLng2.latitude * PI / 180;
+        double long2 = latLng2.longitude * PI / 180;
+
+        double dLon = (long2 - long1);
+
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+                * Math.cos(lat2) * Math.cos(dLon);
+
+        double brng = Math.atan2(y, x);
+
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+
+        return brng;
+    }
+    private void rotateMarker(final Marker marker, final float toRotation) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final float startRotation = marker.getRotation();
+        final long duration = 1000;
+
+        final Interpolator interpolator = new LinearInterpolator();
+       // Log.d("Bearing: "+toRotation);
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed / duration);
+
+                float rot = t * toRotation + (1 - t) * startRotation;
+                marker.setRotation(-rot > 180 ? rot / 2 : rot);
+                if (t < 1.0) {
+                    // Post again 10ms later.
+                    handler.postDelayed(this, 10);
+                }
+            }
+        });
+    }
+
 
 
 }
