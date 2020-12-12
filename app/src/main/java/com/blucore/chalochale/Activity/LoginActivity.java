@@ -2,21 +2,17 @@ package com.blucore.chalochale.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,6 +31,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.blucore.chalochale.Driver.DriverMainActivity;
+import com.blucore.chalochale.Driver.DriverMapFragment;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
 
@@ -137,10 +135,12 @@ public class LoginActivity extends AppCompatActivity  {
                         String number=jsonObject.getString("contact_no");
                         String user_id=jsonObject.getString("user_id");
                         String user_status=jsonObject.getString("user_status");
+                        String role=jsonObject.getString("roll");
 
                         preferences.set("contact_no",number);
                         preferences.set("user_id",user_id);
                         preferences.set("user_status",user_status);
+                        preferences.set("roll",role);
                         preferences.commit();
 
 
@@ -205,6 +205,8 @@ public class LoginActivity extends AppCompatActivity  {
             public void onClick(View view) {
 
                 if (Utils.isNetworkConnectedMainThred(LoginActivity.this)) {
+                    ProgressForSignup();
+                    dialog.show();
                     ConfirmLoginOtp(otpTextView.getOTP());
 
                 } else {
@@ -216,15 +218,28 @@ public class LoginActivity extends AppCompatActivity  {
 
     }
 
+    private void ProgressForSignup() {
+        dialog = new Dialog(LoginActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_for_cart);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+    }
+
     private void ConfirmLoginOtp(final String otp) {
        // final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Authenticating", "Please wait while we check the entered code", false,false);
         //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
        // final String otp = editTextConfirmOtp.getText().toString().trim();
 
-
         StringRequest request = new StringRequest(Request.Method.POST, confirm_otp, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                dialog.cancel();
 
                 Log.e("forgot password",response);
                 /*if(response.equalsIgnoreCase("OTP Verified successfully")){
@@ -235,6 +250,22 @@ public class LoginActivity extends AppCompatActivity  {
 
                 }*/
                 if(response.equalsIgnoreCase("OTP Verified successfully")){
+                   /* if (preferences.get("roll").equalsIgnoreCase("driver"))
+                    {
+                        Intent i = new Intent(LoginActivity.this, DriverMainActivity.class);
+                        startActivity(i);
+                    }else{
+                        if (preferences.get("user_status").equalsIgnoreCase("Existing User")){
+                            Intent i=new Intent(LoginActivity.this,MainActivity.class);
+                            startActivity(i);
+
+                        }else {
+                            Intent in = new Intent(LoginActivity.this, SignUpActivity.class);
+                            startActivity(in);
+                        }
+
+                    }
+*/
                     if (preferences.get("user_status").equalsIgnoreCase("Existing User")){
                         Intent i=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
@@ -258,6 +289,7 @@ public class LoginActivity extends AppCompatActivity  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog.cancel();
                 Log.e("error_response", "" + error);
             }
         }){

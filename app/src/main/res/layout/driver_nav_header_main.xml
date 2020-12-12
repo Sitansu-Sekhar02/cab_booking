@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_150sdp"
+    android:background="@drawable/side_nav_bar"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+
+        <LinearLayout
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/boy"
+                android:layout_height="@dimen/_60sdp" />
+
+            <TextView
+                android:id="@+id/tvUsefullname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sitansu Sekhar"
+                android:textColor="#000"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textSize="20sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+            <TextView
+                android:id="@+id/tvUserContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="@dimen/_14sdp"
+                android:gravity="center"
+                android:text="+919511273873" />
+
+    </LinearLayout>
+
+</LinearLayout>

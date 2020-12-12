@@ -11,7 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blucore.chalochale.Fragments.DashboardFragment;
+import com.blucore.chalochale.Driver.DriverMainActivity;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
 
@@ -51,16 +51,22 @@ public class SplashActivity extends AppCompatActivity {
                 {
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
-
                 }
                 else
                 {
-                        Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                    /*if(preferences.get("roll").equals("driver")){
+                        Intent i = new Intent(SplashActivity.this, DriverMainActivity.class);
                         startActivity(i);
-
+                    }else{
+                        Intent i = new Intent(SplashActivity.this, DriverMainActivity.class);
+                        startActivity(i);
+//                         Intent i = new Intent(SplashActivity.this, MainActivity.class);
+//                        startActivity(i);
+                    }*/
+                    Intent i = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(i);
                 }
                 overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
-
                 finish();
             }
         },SPLASH_SCREEN);

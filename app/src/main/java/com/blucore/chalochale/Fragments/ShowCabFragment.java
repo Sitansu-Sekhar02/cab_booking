@@ -6,10 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -42,13 +41,13 @@ import com.blucore.chalochale.extra.DirectionFinder;
 import com.blucore.chalochale.extra.Route;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -58,6 +57,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.SquareCap;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -67,6 +67,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.blucore.chalochale.Activity.MainActivity.tvHeaderText;
+import static com.google.android.gms.maps.model.JointType.ROUND;
 
 public class ShowCabFragment extends Fragment implements OnMapReadyCallback, DirectionFinderListener {
     Location currentLocation;
@@ -90,7 +91,8 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     Double latitute,longitute;
-    Double longt,lati;
+
+    Double lat,lng;
 
     Button confirmRide;
 
@@ -113,12 +115,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         mapFragment.getMapAsync(this);
 
         Bundle b = getArguments();
-        String source = b.getString("source");
+         String source = b.getString("source");
         String destination = b.getString("destination");
-       // getLocationFromAddress(context,strAddress);
-
-        Log.e("source", "" + source);
-
+        getLocationFromAddress(destination);
+       // Log.e("destination",""+getLocationFromAddress());
 
         try {
             new DirectionFinder(this, source, destination).execute();
@@ -131,10 +131,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             mGPS.getLocation();
             latitute = mGPS.getLatitude();
             longitute = mGPS.getLongitude();
-        }else if (mGPS.canGetLocation()){
-            mGPS.getLocation();
-            lati = mGPS.getLatitude();
-            longt = mGPS.getLongitude();
         } else {
             System.out.println("Unable");
         }
@@ -167,20 +163,47 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         return view;
     }
 
+    private LatLng getLocationFromAddress(String destination) {
+        Geocoder coder = new Geocoder(getActivity(), Locale.getDefault());
+        List<Address> address;
+        LatLng p1 = null;
+
+        try {
+            // May throw an IOException
+            address = coder.getFromLocationName(destination, 5);
+            if (address == null) {
+                return p1;
+            }
+
+            Address location = address.get(0);
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+            lat=location.getLatitude();
+            lng=location.getLongitude();
+            Log.e("latlang",""+p1);
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+        }
+
+        return p1;
+
+    }
+
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
         transaction.replace(R.id.main_fragment_container, fragment);
         transaction.commit();
     }
-    public LatLng getLocationFromAddress(Context context, String strAddress) {
+    public LatLng getLocationFromAddress(Context context, String destination) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;
         LatLng p1 = null;
 
         try {
             // May throw an IOException
-            address = coder.getFromLocationName(strAddress, 5);
+            address = coder.getFromLocationName(destination, 5);
             if (address == null) {
                 return null;
             }
@@ -252,10 +275,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         destinationMarkers = new ArrayList<>();
 
         ArrayList<LatLng> locations = new ArrayList();
-        locations.add(new LatLng(18.591867, 73.746418 ));
-        locations.add(new LatLng(18.589823, 73.745099));
-        locations.add(new LatLng(18.592375, 73.745153));
-        locations.add(new LatLng(18.591051, 73.751255));
+        locations.add(new LatLng(118.580669255285365, 73.74254638744726 ));
+        locations.add(new LatLng(18.59059450137149, 73.72555191223913));
+        locations.add(new LatLng(18.59970940309996, 73.7673305611182));
+        locations.add(new LatLng(18.60379728631155, 73.74187737837005));
 
 
         for(LatLng location : locations){
@@ -265,14 +288,14 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                     .title("available taxi"));
         }
         for (Route route : routes) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 13));
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_taxi_black))
                     .title(route.startAddress)
                     .position(route.startLocation)));
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
@@ -287,10 +310,8 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             polylinePaths.add(mMap.addPolyline(polylineOptions));
 
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
             LatLng origin = new LatLng(latitute,longitute);
-            Log.e("origin",""+origin);
-            LatLng dest = new LatLng(18.524283810720306, 73.85738833581495);
+            LatLng dest = new LatLng(lat, lng);
             Log.e("dest",""+dest);
             builder.include(origin);
             builder.include(dest);
@@ -304,38 +325,14 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             mMap.animateCamera(cu);
 
         }
-
-
     }
-    private double bearingBetweenLocations(LatLng latLng1,LatLng latLng2) {
-
-        double PI = 3.14159;
-        double lat1 = latLng1.latitude * PI / 180;
-        double long1 = latLng1.longitude * PI / 180;
-        double lat2 = latLng2.latitude * PI / 180;
-        double long2 = latLng2.longitude * PI / 180;
-
-        double dLon = (long2 - long1);
-
-        double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
-                * Math.cos(lat2) * Math.cos(dLon);
-
-        double brng = Math.atan2(y, x);
-
-        brng = Math.toDegrees(brng);
-        brng = (brng + 360) % 360;
-
-        return brng;
-    }
-    private void rotateMarker(final Marker marker, final float toRotation) {
+    public void rotateMarker(final Marker marker, final float toRotation, final float st,final double lat, final double lng) {
         final Handler handler = new Handler();
         final long start = SystemClock.uptimeMillis();
-        final float startRotation = marker.getRotation();
-        final long duration = 1000;
-
+        final float startRotation = st;
+        final long duration = 1555;
+        final LatLng startPosition = marker.getPosition();
         final Interpolator interpolator = new LinearInterpolator();
-       // Log.d("Bearing: "+toRotation);
 
         handler.post(new Runnable() {
             @Override
@@ -344,16 +341,16 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                 float t = interpolator.getInterpolation((float) elapsed / duration);
 
                 float rot = t * toRotation + (1 - t) * startRotation;
+                double currentLat = (lat - startPosition.latitude) * t + startPosition.latitude;
+                double currentLng = (lng - startPosition.longitude) * t + startPosition.longitude;
                 marker.setRotation(-rot > 180 ? rot / 2 : rot);
                 if (t < 1.0) {
-                    // Post again 10ms later.
-                    handler.postDelayed(this, 10);
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
                 }
+
             }
         });
     }
-
-
-
 }
 
