@@ -250,7 +250,7 @@ public class LoginActivity extends AppCompatActivity  {
 
                 }*/
                 if(response.equalsIgnoreCase("OTP Verified successfully")){
-                   /* if (preferences.get("roll").equalsIgnoreCase("driver"))
+                    /*if (preferences.get("roll").equalsIgnoreCase("driver"))
                     {
                         Intent i = new Intent(LoginActivity.this, DriverMainActivity.class);
                         startActivity(i);
@@ -264,8 +264,7 @@ public class LoginActivity extends AppCompatActivity  {
                             startActivity(in);
                         }
 
-                    }
-*/
+                    }*/
                     if (preferences.get("user_status").equalsIgnoreCase("Existing User")){
                         Intent i=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
@@ -274,7 +273,6 @@ public class LoginActivity extends AppCompatActivity  {
                         Intent in = new Intent(LoginActivity.this, SignUpActivity.class);
                         startActivity(in);
                     }
-
 
                     //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
                 }else{

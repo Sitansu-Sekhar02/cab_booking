@@ -416,8 +416,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     }
 
 
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -453,7 +451,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-
 
 
     }
@@ -632,7 +629,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
 
 
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Your Location");
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.markers)).title("Your Location");
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
@@ -641,9 +638,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                     this);
         }
 
-
-
     }
+
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -687,4 +683,5 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             }
         }
     }
+
 }

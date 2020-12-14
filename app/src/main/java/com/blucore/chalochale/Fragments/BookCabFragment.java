@@ -92,6 +92,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     View view;
 
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -116,21 +117,20 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             public void onClick(View v) {
                 Intent intent=new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:7263973577"));
-                Log.e("intent",""+intent);
                 startActivity(intent);
             }
         });
-      /*  Bundle bundle = getArguments();
-        String source = bundle.getString("source");
-        String destination = bundle.getString("destination");
-        getLocationFromAddress(destination);
+        Bundle ba = getArguments();
+        String sources = ba.getString("source");
+        String destinations = ba.getString("destination");
+        getLocationFromAddress(destinations);
         // Log.e("destination",""+getLocationFromAddress());
 
         try {
-            new DirectionFinder(this, source, destination).execute();
+            new DirectionFinder(this, sources, destinations).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-        }*/
+        }
 
 
         if (mGPS.canGetLocation()) {
@@ -222,7 +222,6 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
                 break;
         }
 
-
     }
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -272,7 +271,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
                     .title(routes.startAddress)
                     .position(routes.startLocation)));
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_adjust_24))
                     .title(routes.endAddress)
                     .position(routes.endLocation)));
 

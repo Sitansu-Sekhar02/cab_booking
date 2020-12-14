@@ -90,15 +90,14 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
-    Double latitute,longitute;
+    Double latitute, longitute;
 
-    Double lat,lng;
+    Double lat, lng;
 
     Button confirmRide;
-
+    String source,destination;
 
     View view;
-
 
 
     @Nullable
@@ -115,10 +114,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         mapFragment.getMapAsync(this);
 
         Bundle b = getArguments();
-         String source = b.getString("source");
-        String destination = b.getString("destination");
+         source = b.getString("source");
+         destination = b.getString("destination");
         getLocationFromAddress(destination);
-       // Log.e("destination",""+getLocationFromAddress());
+        // Log.e("destination",""+getLocationFromAddress());
 
         try {
             new DirectionFinder(this, source, destination).execute();
@@ -147,12 +146,12 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         confirmRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragmentWithAnimation(new BookCabFragment());
+                replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
 
             }
         });
 
-        ArrayList cabNames = new ArrayList<>(Arrays.asList("Auto"));
+        ArrayList cabNames = new ArrayList<>(Arrays.asList("Auto","sudan","mini"));
 
 
         RecyclerView recyclerView = view.findViewById(R.id.car_list);
@@ -177,9 +176,9 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
             Address location = address.get(0);
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
-            lat=location.getLatitude();
-            lng=location.getLongitude();
-            Log.e("latlang",""+p1);
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+            Log.e("latlang", "" + p1);
 
         } catch (IOException ex) {
 
@@ -190,12 +189,17 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
     }
 
-    public void replaceFragmentWithAnimation(Fragment fragment) {
+    public void replaceFragmentWithAnimation(Fragment fragment,String source,String destination) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Bundle bundle=new Bundle();
+        bundle.putString("source",source);
+        bundle.putString("destination",destination);
+        fragment.setArguments(bundle);
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
         transaction.replace(R.id.main_fragment_container, fragment);
         transaction.commit();
     }
+
     public LatLng getLocationFromAddress(Context context, String destination) {
         Geocoder coder = new Geocoder(context);
         List<Address> address;
@@ -235,6 +239,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         }
         mMap.setMyLocationEnabled(true);
     }
+
     @Override
     public void onDirectionFinderStart() {
         progressDialog = ProgressDialog.show(getActivity(), "Please wait.",
@@ -253,11 +258,12 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         }
 
         if (polylinePaths != null) {
-            for (Polyline polyline:polylinePaths ) {
+            for (Polyline polyline : polylinePaths) {
                 polyline.remove();
             }
         }
     }
+
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
@@ -275,13 +281,13 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         destinationMarkers = new ArrayList<>();
 
         ArrayList<LatLng> locations = new ArrayList();
-        locations.add(new LatLng(118.580669255285365, 73.74254638744726 ));
+        locations.add(new LatLng(118.580669255285365, 73.74254638744726));
         locations.add(new LatLng(18.59059450137149, 73.72555191223913));
         locations.add(new LatLng(18.59970940309996, 73.7673305611182));
         locations.add(new LatLng(18.60379728631155, 73.74187737837005));
 
 
-        for(LatLng location : locations){
+        for (LatLng location : locations) {
             mMap.addMarker(new MarkerOptions()
                     .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_local_taxi_24))
                     .position(location)
@@ -291,11 +297,11 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 13));
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_taxi_black))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.dot_circle))
                     .title(route.startAddress)
                     .position(route.startLocation)));
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_adjust_24))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
@@ -303,6 +309,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                     geodesic(true).
                     color(Color.BLACK).
                     width(10);
+
 
             for (int i = 0; i < route.points.size(); i++)
                 polylineOptions.add(route.points.get(i));

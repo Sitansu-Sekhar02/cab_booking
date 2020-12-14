@@ -22,24 +22,25 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="#0C0C0C"
             android:gravity="center"
             android:orientation="horizontal">
             <LinearLayout
                 android:id="@+id/callDriver"
                 android:layout_width="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginRight="@dimen/_15sdp"
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_gravity="center"
                     android:layout_height="@dimen/_30sdp"
                     android:src="@drawable/ic_baseline_add_ic_call_24" />
-                <Button
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#ffffff"
                     android:gravity="center"
+                    android:textColor="#ffffff"
                     android:textAllCaps="false"
                     android:text="Call Driver"
                     android:textSize="@dimen/_12sdp" />
@@ -47,6 +48,7 @@
 
 
             <View
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="@dimen/_1sdp"
                 android:layout_height="match_parent"
                 android:background="@android:color/darker_gray"/>
@@ -62,11 +64,11 @@
                 android:layout_gravity="center"
                 android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ic_baseline_cancel_24" />
-            <Button
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
                 android:gravity="center"
+                android:textColor="#ffffff"
                 android:textAllCaps="false"
                 android:text="Cancel Ride"
                 android:textSize="@dimen/_12sdp" />
@@ -74,23 +76,25 @@
 
             <View
                 android:layout_width="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
                 android:layout_height="match_parent"
                 android:background="@android:color/darker_gray"/>
         <LinearLayout
             android:id="@+id/shareRide"
             android:layout_width="wrap_content"
             android:orientation="vertical"
+            android:layout_marginLeft="@dimen/_15sdp"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:layout_height="@dimen/_30sdp"
                 android:src="@drawable/ic_share_24" />
-            <Button
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ffffff"
                 android:gravity="center"
+                android:textColor="#ffffff"
                 android:textAllCaps="false"
                 android:text="Share"
                 android:textSize="@dimen/_12sdp" />
@@ -132,6 +136,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="@dimen/_14sdp"
+                            android:textColor="#000"
                             android:layout_marginTop="@dimen/_15sdp"
                             android:textStyle="bold"
                             android:text="Amol Kharsade"/>

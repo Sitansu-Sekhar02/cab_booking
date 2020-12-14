@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    /*if(preferences.get("roll").equals("driver")){
+                   /* if(preferences.get("roll").equals("driver")){
                         Intent i = new Intent(SplashActivity.this, DriverMainActivity.class);
                         startActivity(i);
                     }else{

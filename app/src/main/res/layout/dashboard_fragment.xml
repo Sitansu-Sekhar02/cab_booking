@@ -198,7 +198,7 @@
                 android:background="#615D5D"
                 android:gravity="center"
                 android:text="Show Rides"
-                android:textColor="#FBD52B"
+                android:textColor="#FDB00E"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
