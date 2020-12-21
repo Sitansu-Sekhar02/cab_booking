@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group>
+
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_baseline_person_pin_24"
@@ -11,11 +11,6 @@
             android:id="@+id/nav_rides"
             android:icon="@drawable/ic_baseline_restore_24"
             android:title="Your Rides" />
-
-    </group>
-
-    <item android:title="More Actions">
-        <menu>
 
             <item
                 android:id="@+id/nav_support"
@@ -34,9 +29,5 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_baseline_power_settings_new_24"
                 android:title="Log Out" />
-
-
-        </menu>
-    </item>
 
 </menu>

@@ -20,8 +20,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -36,6 +38,7 @@ import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.DirectionFinder;
 import com.blucore.chalochale.extra.Route;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -62,6 +65,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.blucore.chalochale.Activity.MainActivity.tvHeaderText;
 
 
@@ -85,6 +90,14 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     private List<Polyline> polylinePaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     LinearLayout callDriver;
+    LinearLayout shareRide;
+    CircleImageView driver_image;
+    TextView driver_name;
+    TextView vehicle_name;
+    TextView vehicle_number;
+    TextView total_bookPrice;
+
+
 
     Double lat,lng;
 
@@ -102,6 +115,26 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         GPSTracker mGPS = new GPSTracker(getActivity());
         MainActivity.iv_menu.setImageResource(R.drawable.ic_back);
         callDriver=view.findViewById(R.id.callDriver);
+        shareRide=view.findViewById(R.id.shareRide);
+        driver_image=view.findViewById(R.id.driver_image);
+        driver_name=view.findViewById(R.id.driver_name);
+        vehicle_name=view.findViewById(R.id.vehicle_name);
+        vehicle_number=view.findViewById(R.id.vehicle_number);
+        total_bookPrice=view.findViewById(R.id.total_price);
+
+
+        Log.e("id_cab",""+ShowCabFragment.cab_id);
+        driver_name.setText(ShowCabFragment.driver_names);
+        vehicle_name.setText(ShowCabFragment.vehicle_type);
+        vehicle_number.setText(ShowCabFragment.vehicle_number);
+        total_bookPrice.setText(ShowCabFragment.total_bookPrice);
+
+        //driver_image.setImageResource(ShowCabFragment.driver_images);
+
+        Glide.with(this)
+                .load(ShowCabFragment.driver_images)
+                .into(driver_image);
+        Log.e("driver_name",""+ShowCabFragment.driver_names);
 
         tvHeaderText.setVisibility(View.GONE);
         MainActivity.iv_menu.setOnClickListener(new View.OnClickListener() {
@@ -116,8 +149,20 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:7263973577"));
+                intent.setData(Uri.parse("tel:"+ShowCabFragment.driver_number));
                 startActivity(intent);
+            }
+        });
+        shareRide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent =   new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                String shareBody="Your body here";
+                String subject="Your subject here";
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT,subject);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                startActivity(Intent.createChooser(shareIntent, "Share via"));
             }
         });
         Bundle ba = getArguments();

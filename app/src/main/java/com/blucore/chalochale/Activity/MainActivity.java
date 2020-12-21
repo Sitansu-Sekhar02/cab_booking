@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,9 +34,12 @@ import com.blucore.chalochale.Fragments.SupportFragment;
 import com.blucore.chalochale.Fragments.UserProfileFragment;
 import com.blucore.chalochale.Fragments.YourRidingFragment;
 import com.blucore.chalochale.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 
 import com.blucore.chalochale.extra.Preferences;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     public static int backPressed = 0;
@@ -57,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         iv_menu = findViewById(R.id.iv_menu);
         iv_menu.setOnClickListener(this);
         preferences=new Preferences(this);
+
+
 
 
 

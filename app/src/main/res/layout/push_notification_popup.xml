@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_height="@dimen/_250sdp">
+    <LinearLayout
+        android:id="@+id/rlmain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_3sdp">
+        <RelativeLayout
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/lnrdate"
+                android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/cab_date"
+                android:text="Date :"
+                android:textColor="#000"
+                android:textSize="@dimen/_14sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/date"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_width="wrap_content"
+                android:text="12.7.21,04.56"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/total_price"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_width="match_parent"
+                android:text="\u20B9 35"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:textSize="@dimen/_20sdp"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+            <LinearLayout
+                android:layout_below="@+id/lnrdate"
+                android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:text="Cab :"
+                    android:textColor="#000"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/cab_no"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="@dimen/_15sdp"
+                    android:text="CRN 564345373"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.cardview.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                card_view:cardCornerRadius="@dimen/_4sdp"
+                card_view:cardElevation="@dimen/_2sdp">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="From :"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold"
+                        android:textColor="#000"/>
+                    <TextView
+                        android:id="@+id/from_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:textStyle="bold"
+                        android:text="Laxmi Chowk,Hinjewadi"
+                        android:textSize="@dimen/_15sdp"
+                        android:singleLine="true"/>
+
+                </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="To :"
+                            android:textSize="@dimen/_15sdp"
+                            android:textStyle="bold"
+                            android:textColor="#000"/>
+                        <TextView
+                            android:id="@+id/to_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:textStyle="bold"
+                            android:text="Wakad Bridge,Wakad"
+                            android:textSize="@dimen/_15sdp"
+                            android:singleLine="true"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/_10sdp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/accept_ride"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Accept"
+                            android:background="#77D50B"
+                            android:textSize="@dimen/_15sdp"
+                            android:textStyle="bold"
+                            android:layout_marginRight="@dimen/_20sdp"
+                            android:textColor="#F8F5F5"/>
+                        <Button
+                            android:id="@+id/cancel_ride"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FDFAFA"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:textStyle="bold"
+                            android:background="#F81F0F"
+                            android:text="Reject"
+                            android:textSize="@dimen/_15sdp"
+                            android:singleLine="true"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+
+
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+   <!-- <View
+        android:layout_width="match_parent"
+        android:background="#000"
+        android:layout_height="@dimen/_1sdp"/>
+-->
+
+
+</LinearLayout>

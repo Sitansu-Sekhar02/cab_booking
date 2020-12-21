@@ -22,7 +22,7 @@
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#0C0C0C"
+            android:background="#CE2B2A2A"
             android:gravity="center"
             android:orientation="horizontal">
             <LinearLayout
@@ -105,56 +105,188 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@drawable/button_border"
         android:id="@+id/TaxiHorizontal"
         android:layout_above="@+id/driver_details"
         android:layout_alignParentBottom="false"
+        android:background="#FCFDF8F8"
         android:layout_height="@dimen/_100sdp">
         <LinearLayout
             android:layout_width="match_parent"
             android:gravity="center_vertical"
             android:layout_height="match_parent">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:layout_height="match_parent">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/driver_image"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:src="@drawable/ic_baseline_person_pin_24" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="@dimen/_120sdp"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/driver_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="#000"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:textStyle="bold"
+                        android:text="Amol Kharsade"/>
+                    <TextView
+                        android:id="@+id/vehicle_name"
+                        android:drawableLeft="@drawable/ic_baseline_local_taxi_24"
+                        android:layout_width="match_parent"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:layout_height="wrap_content"
+                        android:text="TATA Altroz"/>
+                    <TextView
+                        android:id="@+id/vehicle_number"
+                        android:gravity="center"
+                        android:layout_marginRight="@dimen/_30sdp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="MH12 AP3445"/>
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:gravity="center"
                     android:layout_height="match_parent">
-                    <LinearLayout
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:gravity="center"
-                        android:layout_height="match_parent">
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:layout_width="@dimen/_60sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:src="@drawable/ic_baseline_person_pin_24" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="@dimen/_14sdp"
-                            android:textColor="#000"
-                            android:layout_marginTop="@dimen/_15sdp"
-                            android:textStyle="bold"
-                            android:text="Amol Kharsade"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TATA Altroz"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MH12 AP3445"/>
+                        android:id="@+id/total_price"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_24sdp"
+                        android:textColor="#000"
+                        android:text="\u20B9 45"/>
+                </LinearLayout>
 
-                    </LinearLayout>
+            </LinearLayout>
 
+
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_above="@+id/TaxiHorizontal"
+        android:layout_alignParentBottom="false"
+        android:background="#FCFDF8F8"
+        android:layout_height="@dimen/_50sdp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="#676666"
+                    android:textStyle="bold"
+                    android:text="Payment"/>
+
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:src="@drawable/google"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/_14sdp"
+                android:gravity="center"
+                android:textColor="#676666"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:textStyle="bold"
+                android:text="Pay"/>
+            <Button
+                android:id="@+id/google_pay"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/_160sdp"
+                android:background="@drawable/button_border"
+                android:text="Pay"
+                android:paddingLeft="@dimen/_7sdp"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/google_sm"
+                android:textColor="#ffffff"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="#B6B6B6"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:background="@drawable/button_border"
+        android:id="@+id/payment"
+        android:layout_above="@+id/TaxiHorizontal"
+        android:layout_alignParentBottom="false"
+        android:layout_height="@dimen/_60sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Payment"
+                    android:textStyle="bold"
+                    android:textColor="#000"
+                    android:textSize="@dimen/_14sdp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_14sdp"
+                        android:textColor="#000"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:textStyle="bold"
+                        android:text="Amol Kharsade"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TATA Altroz"/>
 
                 </LinearLayout>
 
-        </LinearLayout>
+
+            </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

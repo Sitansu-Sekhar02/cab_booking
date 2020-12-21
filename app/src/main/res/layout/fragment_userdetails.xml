@@ -73,6 +73,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/_15sdp"
                         android:gravity="center"
+                        android:textStyle="bold"
                         android:text="Change Profile Details"
                         android:id="@+id/tvChange"
                         android:textColor="@color/red_900"
@@ -83,6 +84,7 @@
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:gravity="center"
+                    android:layout_margin="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_35sdp"
                     android:layout_height="match_parent">
                     <TextView
@@ -97,6 +99,7 @@
                         android:layout_width="match_parent"
                         android:textSize="@dimen/_16sdp"
                         android:textStyle="bold"
+                        android:textColor="#000"
                         android:paddingLeft="@dimen/_8sdp"
                         android:layout_margin="@dimen/_5sdp"
                         android:layout_height="wrap_content"/>
@@ -117,6 +120,7 @@
                         android:layout_width="match_parent"
                         android:layout_margin="@dimen/_5sdp"
                         android:textSize="@dimen/_16sdp"
+                        android:textColor="#000"
                         android:paddingLeft="@dimen/_8sdp"
                         android:textStyle="bold"
                         android:layout_height="wrap_content"/>
@@ -138,6 +142,7 @@
                         android:textSize="@dimen/_16sdp"
                         android:paddingLeft="@dimen/_8sdp"
                         android:textStyle="bold"
+                        android:textColor="#000"
                         android:layout_margin="@dimen/_5sdp"
                         android:layout_height="wrap_content"/>
                     <View

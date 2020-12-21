@@ -2,13 +2,11 @@ package com.blucore.chalochale.Fragments;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
@@ -25,11 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -47,11 +42,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.blucore.chalochale.Activity.DirectionsJSONParser;
 import com.blucore.chalochale.Activity.GPSTracker;
-import com.blucore.chalochale.Activity.MapsActivity;
 import com.blucore.chalochale.Activity.Utils;
-import com.blucore.chalochale.Adapter.AutoCompleteTextview;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.DirectionFinder;
 import com.blucore.chalochale.extra.Preferences;
@@ -59,7 +51,6 @@ import com.blucore.chalochale.extra.Route;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -71,35 +62,25 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.android.libraries.places.api.Places;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -111,7 +92,6 @@ import es.dmoral.toasty.Toasty;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import static com.blucore.chalochale.Activity.MapsActivity.MY_PERMISSIONS_REQUEST_LOCATION;
 
 
 public class DashboardFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
@@ -139,7 +119,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     Preferences preferences;
 
 
-
     View view;
 
     @Nullable
@@ -149,11 +128,20 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         //fetchLocation();
         preferences=new Preferences(getActivity());
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(getActivity(),  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String newToken = instanceIdResult.getToken();
+                Log.e("newToken",newToken);
+
+            }
+        });
+        //Log.e("token",preferences.get("token"));
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
-        }
+        }*/
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -308,7 +296,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 parameters.put("customer_mobile_no", preferences.get("contact_no"));
                 parameters.put("from_address",sSource);
                 parameters.put("to_address", sDestination);
-                parameters.put("driver_id", String.valueOf(1));
+               // parameters.put("driver_id", String.valueOf(1));
                 Log.e("params",""+parameters);
                 return parameters;
             }
@@ -343,7 +331,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     private void ProgressForMain() {
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.progress_for_cart);
+        dialog.setContentView(R.layout.progress_for_load);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;
@@ -351,7 +339,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         window.setAttributes(wlp);
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
-
     }
 
     @Override
@@ -418,7 +405,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
 
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -629,7 +615,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
 
 
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.markers)).title("Your Location");
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.marker2)).title("Your Location");
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));

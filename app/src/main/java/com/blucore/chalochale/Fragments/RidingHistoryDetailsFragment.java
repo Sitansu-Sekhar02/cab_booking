@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
 import com.blucore.chalochale.extra.Route;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -62,6 +65,12 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
     Dialog dialog;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
+    TextView driverName;
+    TextView driverNumber;
+    TextView journeyDate;
+    ImageView vehicleImage;
+    ImageView driver_images;
+    TextView prices;
 
 
 
@@ -81,6 +90,13 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
                 replaceFragmentWithAnimation(new YourRidingFragment());
             }
         });
+        driverName=v.findViewById(R.id.DriverName);
+        driverNumber=v.findViewById(R.id.driverPhone);
+        journeyDate=v.findViewById(R.id.ride_date);
+        vehicleImage=v.findViewById(R.id.vehicle_image);
+        driver_images=v.findViewById(R.id.driver_image);
+        prices=v.findViewById(R.id.price);
+
 
         preferences=new Preferences(getActivity());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -90,6 +106,29 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.ridehistorymap);
         mapFragment.getMapAsync(this);
+
+        Bundle b = getArguments();
+        String name= b.getString("driver_name");
+        String driver_number=b.getString("driverMobileNo");
+        String journey_date=b.getString("dateTime");
+        String cab_image=b.getString("vehicle_image");
+        String driver_image=b.getString("driver_image");
+        String price=b.getString("total_price");
+
+
+        driverName.setText(name);
+        driverNumber.setText(driver_number);
+        journeyDate.setText(journey_date);
+        prices.setText(price);
+
+
+        Glide.with(this)
+                .load(cab_image)
+                .into(vehicleImage);
+        Glide.with(this)
+                .load(driver_image)
+                .into(driver_images);
+
         return v;
     }
 

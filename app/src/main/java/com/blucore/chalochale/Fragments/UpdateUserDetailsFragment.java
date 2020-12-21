@@ -104,7 +104,7 @@ public class UpdateUserDetailsFragment extends Fragment {
     private void ProgressForAddess() {
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.progress_for_cart);
+        dialog.setContentView(R.layout.progress_for_load);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;

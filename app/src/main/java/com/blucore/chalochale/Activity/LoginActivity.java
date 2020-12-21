@@ -32,7 +32,6 @@ import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.blucore.chalochale.Driver.DriverMainActivity;
-import com.blucore.chalochale.Driver.DriverMapFragment;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
 
@@ -221,7 +220,7 @@ public class LoginActivity extends AppCompatActivity  {
     private void ProgressForSignup() {
         dialog = new Dialog(LoginActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.progress_for_cart);
+        dialog.setContentView(R.layout.progress_for_load);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;
@@ -281,7 +280,6 @@ public class LoginActivity extends AppCompatActivity  {
                     //Asking user to enter otp again
                      confirmOtp();
                 }
-
             }
 
         }, new Response.ErrorListener() {

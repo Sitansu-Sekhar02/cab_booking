@@ -193,8 +193,6 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
             }
         }
 
-
-
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Your Location");
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

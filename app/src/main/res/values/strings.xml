@@ -6,6 +6,8 @@
     <string name="map_key" translatable="false">AIzaSyDCcC5AZsRfJtE6Yspv8DBWww8i7IdE1QQ</string>
     <string name="direction_key" translatable="false">AIzaSyADxV6qHEQ1L6w3qLckcn5gFc5UmWa4k2w</string>
 
+
+
     <string name="invalid_PhoneNumber">Please enter valid mobile number</string>
     <string name="auto">Auto</string>
     <string name="Confirm_Cab">Confirm  Ride</string>

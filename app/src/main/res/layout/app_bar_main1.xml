@@ -15,7 +15,8 @@
 
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
+                   android:background="#3BDCD9D9"
+                android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize" />
             <TextView
                     android:layout_gravity="right|top"

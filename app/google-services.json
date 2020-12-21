@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "558903496016",
+    "project_id": "chalochalecab-48aa6",
+    "storage_bucket": "chalochalecab-48aa6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558903496016:android:8215b524af465b522b7055",
+        "android_client_info": {
+          "package_name": "com.blucore.chalochale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558903496016-u83uoaschr3s1ott746n6bl8e88nellk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blucore.chalochale",
+            "certificate_hash": "e7ae398800ceb4a073b8ac9fe314d6cdff0d9d03"
+          }
+        },
+        {
+          "client_id": "558903496016-5qmg8g3ik27riq9elk568p886pjm0bl8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD23z0uQvKFlKJvitLV9VdTANMUghVCHg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558903496016-5qmg8g3ik27riq9elk568p886pjm0bl8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -195,10 +195,10 @@
                 android:id="@+id/ride_now"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#615D5D"
+                android:background="#000"
                 android:gravity="center"
-                android:text="Show Rides"
-                android:textColor="#FDB00E"
+                android:text="Request Cab"
+                android:textColor="#ffffff"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />
 
