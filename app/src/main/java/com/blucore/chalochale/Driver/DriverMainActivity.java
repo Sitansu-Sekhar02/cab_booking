@@ -79,7 +79,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
             }*/
             navigationView.setNavigationItemSelectedListener(this);
         }
-        /*navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        navigationView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
 
@@ -88,10 +88,10 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
                 TextView tvUsername = (TextView) navigationView.findViewById(R.id.tvUsefullname);
                 TextView tvUserContact = (TextView) navigationView.findViewById(R.id.tvUserContact);
 
-                tvUsername.setText(preferences.get("first_name"));
+                tvUsername.setText(preferences.get("driverName"));
                 tvUserContact.setText(preferences.get("contact_no"));
             }
-        });*/
+        });
     }
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -116,7 +116,13 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
 
         }else if (id == R.id.nav_logout) {
             logout();
-        }
+        } else if (id == R.id.nav_support) {
+             replaceFragmentWithAnimation( new SupportFragmentDriver());
+
+         }
+         else if (id == R.id.nav_about) {
+             replaceFragmentWithAnimation(new AboutUsFragmentDriver());
+         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -163,6 +169,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
 //                pref.commit();
 
                 preferences.set("user_id","");
+                preferences.set("roll","");
                 preferences.commit();
                 finishAffinity();
                 dialog.dismiss();

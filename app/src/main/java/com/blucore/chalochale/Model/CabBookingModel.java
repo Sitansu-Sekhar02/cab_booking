@@ -13,8 +13,13 @@ public class CabBookingModel {
     private  String driver_image;
     private  String cab_company;
     private  String driver_number;
+    private  String vehicle_type_id;
+    private  String total_count;
+    private  String otp;
 
-    public CabBookingModel(String cab_id,String driver_id, String cab_name, String cab_image, String cab_time, String cab_price,String distance,String cab_number,String driver_name,String driver_image,String cab_company,String driver_number) {
+
+
+    public CabBookingModel(String cab_id,String driver_id, String cab_name, String cab_image, String cab_time, String cab_price,String distance,String cab_number,String driver_name,String driver_image,String cab_company,String driver_number,String vehicle_type_id,String total_count,String otp) {
         this.cab_id = cab_id;
         this.driver_id=driver_id;
         this.cab_name = cab_name;
@@ -27,6 +32,9 @@ public class CabBookingModel {
         this.cab_company=cab_company;
         this.driver_image=driver_image;
         this.driver_number=driver_number;
+        this.vehicle_type_id=vehicle_type_id;
+        this.total_count=total_count;
+        this.otp=otp;
 
 
     }
@@ -130,5 +138,29 @@ public class CabBookingModel {
 
     public void setDriver_number(String driver_number) {
         this.driver_number = driver_number;
+    }
+
+    public String getVehicle_type_id() {
+        return vehicle_type_id;
+    }
+
+    public void setVehicle_type_id(String vehicle_type_id) {
+        this.vehicle_type_id = vehicle_type_id;
+    }
+
+    public String getTotal_count() {
+        return total_count;
+    }
+
+    public void setTotal_count(String total_count) {
+        this.total_count = total_count;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
     }
 }

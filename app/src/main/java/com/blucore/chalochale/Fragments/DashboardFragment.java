@@ -62,6 +62,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -96,15 +97,15 @@ import static android.app.Activity.RESULT_OK;
 
 public class DashboardFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener,DirectionFinderListener {
-    public static final String rideNow_api="https://chalochalecab.com/Webservices/ride_details.php";
+        LocationListener, DirectionFinderListener {
+    public static final String rideNow_api = "https://admin.chalochalecab.com/Webservices/ride_details.php";
 
-    private String api_key="AIzaSyC7-ZAGF_-ya8rVIpTb04-MKIUUhQ8iXgw";
-    EditText pickLocation,dropLocation;
+    private String api_key = "AIzaSyC7-ZAGF_-ya8rVIpTb04-MKIUUhQ8iXgw";
+    EditText pickLocation, dropLocation;
     Button btn;
     private GoogleMap mMap;
     Button ride_now;
-    Double latitute,longitute;
+    Double latitute, longitute;
     private static int AUTOCOMPLETE_REQUEST_CODE = 1;
     private static int AUTOCOMPLETE_REQUEST_CODEE = 2;
     String TAG = "placeautocomplete";
@@ -115,7 +116,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     Dialog dialog;
-    String sSource,sDestination;
+    String sSource, sDestination;
     Preferences preferences;
 
 
@@ -127,15 +128,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         view = inflater.inflate(R.layout.dashboard_fragment, container, false);
         //fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         //fetchLocation();
-        preferences=new Preferences(getActivity());
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(getActivity(),  new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                String newToken = instanceIdResult.getToken();
-                Log.e("newToken",newToken);
+        preferences = new Preferences(getActivity());
 
-            }
-        });
         //Log.e("token",preferences.get("token"));
 
 
@@ -146,27 +140,27 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-       //ProgressForMain();
+        //ProgressForMain();
         //getCompleteAddressString();
         GPSTracker mGPS = new GPSTracker(getActivity());
-        pickLocation=view.findViewById(R.id.mymLocation);
-        dropLocation=view.findViewById(R.id.dropoffLocation);
-        btn=view.findViewById(R.id.path);
+        pickLocation = view.findViewById(R.id.mymLocation);
+        dropLocation = view.findViewById(R.id.dropoffLocation);
+        btn = view.findViewById(R.id.path);
 
-        ride_now=view.findViewById(R.id.ride_now);
+        ride_now = view.findViewById(R.id.ride_now);
 
         //pickLocation.setFocusable(false);
 
-        if(mGPS.canGetLocation()){
+        if (mGPS.canGetLocation()) {
             mGPS.getLocation();
-             pickLocation.setText("Lat"+mGPS.getLatitude()+"Lon"+mGPS.getLongitude());
-             latitute= mGPS.getLatitude();
-             longitute=mGPS.getLongitude();
-             pickLocation.setText(getCompleteAddressString());
+            pickLocation.setText("Lat" + mGPS.getLatitude() + "Lon" + mGPS.getLongitude());
+            latitute = mGPS.getLatitude();
+            longitute = mGPS.getLongitude();
+            pickLocation.setText(getCompleteAddressString());
 
-        }else{
-             pickLocation.setText("Unable to Find Location");
-             System.out.println("Unable");
+        } else {
+            pickLocation.setText("Unable to Find Location");
+            System.out.println("Unable");
         }
        /* btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,8 +172,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         ride_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 sSource=pickLocation.getText().toString();
-                 sDestination=dropLocation.getText().toString();
+                sSource = pickLocation.getText().toString();
+                sDestination = dropLocation.getText().toString();
 
                 if (sSource.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter origin address!", Toast.LENGTH_SHORT).show();
@@ -194,7 +188,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                         RideNow();
                         //replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
                         //ProgressForMain();
-                       // dialog.show();
+                        // dialog.show();
                     } else {
                         Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_LONG).show();
                     }
@@ -237,18 +231,18 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         pickLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Place.Field> placefield=Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,Place.Field.NAME);
-                Intent i=new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,placefield).build(getActivity());
-                startActivityForResult(i,AUTOCOMPLETE_REQUEST_CODE);
+                List<Place.Field> placefield = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+                Intent i = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, placefield).build(getActivity());
+                startActivityForResult(i, AUTOCOMPLETE_REQUEST_CODE);
             }
         });
         dropLocation.setFocusable(false);
         dropLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<Place.Field> fieldList=Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG,Place.Field.NAME);
-                Intent intent=new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN,fieldList).build(getActivity());
-                startActivityForResult(intent,AUTOCOMPLETE_REQUEST_CODEE);
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fieldList).build(getActivity());
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODEE);
 
             }
         });
@@ -258,19 +252,18 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     private void RideNow() {
-        StringRequest request = new StringRequest(Request.Method.POST,rideNow_api, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, rideNow_api, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 dialog.cancel();
-                Log.e("ride",response);
+                Log.e("ride", response);
                 try {
-                    JSONObject jsonObject=new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response);
 
-                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
-                    {
+                    if (jsonObject.getString("success").equalsIgnoreCase("1")) {
                        /* preferences.set("address",jsonObject.getString("address"));
                         preferences.commit();*/
-                        replaceFragmentWithAnimation(new ShowCabFragment(),sSource,sDestination);
+                        replaceFragmentWithAnimation(new ShowCabFragment(), sSource, sDestination);
                         //Toasty.success(getActivity(),"Address Update Successfully",Toast.LENGTH_SHORT).show();
                     }
                     //replaceFragmentWithAnimation(new CheckoutFragment());
@@ -287,21 +280,20 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 dialog.cancel();
                 Log.e("error_response", "" + error);
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("user_id",preferences.get("user_id"));
+                parameters.put("user_id", preferences.get("user_id"));
                 parameters.put("customer_name", preferences.get("full_name"));
                 parameters.put("customer_mobile_no", preferences.get("contact_no"));
-                parameters.put("from_address",sSource);
+                parameters.put("from_address", sSource);
                 parameters.put("to_address", sDestination);
-               // parameters.put("driver_id", String.valueOf(1));
-                Log.e("params",""+parameters);
+                Log.e("params", "" + parameters);
                 return parameters;
             }
         };
-        RequestQueue requestQueue= Volley.newRequestQueue(getActivity());
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(request);
 
 
@@ -331,7 +323,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     private void ProgressForMain() {
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.progress_for_load);
+        dialog.setContentView(R.layout.progress_for_searchingcab);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;
@@ -359,7 +351,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                 // The user canceled the operation.
             }
             return;
-        }else if (requestCode == AUTOCOMPLETE_REQUEST_CODE){
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
 
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -411,8 +403,10 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
+        //ProgressForMain();
+       // dialog.show();
 
-        ArrayList<LatLng> locations = new ArrayList();
+        /*ArrayList<LatLng> locations = new ArrayList();
         locations.add(new LatLng(latitute, longitute ));
         locations.add(new LatLng(18.589823, 73.745099));
         locations.add(new LatLng(18.592375, 73.745153));
@@ -424,7 +418,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                     .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_local_taxi_24))
                     .position(location)
                     .title("available taxi"));
-        }
+        }*/
         //Initialize Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
@@ -432,11 +426,45 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
+
             }
-        } else {
+        }
+         else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+       /* LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 13));
+
+         *//*   CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(latitute, longitute))      // Sets the center of the map to location user
+                    .zoom(15)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*//*
+            mMap.setMyLocationEnabled(true);
+        }else {
+            //buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+*/
 
 
     }
@@ -616,6 +644,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
 
         markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.marker2)).title("Your Location");
+        //dialog.cancel();
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));

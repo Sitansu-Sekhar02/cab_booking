@@ -108,10 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
     }
-
-
 
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -205,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                pref.commit();
 
                 preferences.set("user_id","");
+                preferences.set("roll","");
                 preferences.commit();
                 finishAffinity();
                 dialog.dismiss();

@@ -1,5 +1,6 @@
 package com.blucore.chalochale.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -34,6 +35,12 @@ import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.blucore.chalochale.Driver.DriverMainActivity;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,13 +58,14 @@ public class LoginActivity extends AppCompatActivity  {
     Dialog dialog;
     private TextView buttonConfirm;
     private ImageView ivClose;
+    String newToken;
     //String user_status;
 
     private String phone;
     AwesomeValidation awesomeValidation;
 
-    public static final String mobile_otp = "https://chalochalecab.com/Webservices/login.php";
-    public static final String confirm_otp = "https://chalochalecab.com/Webservices/confirm.php";
+    public static final String mobile_otp = "https://admin.chalochalecab.com/Webservices/login.php";
+    public static final String confirm_otp = "https://admin.chalochalecab.com/Webservices/confirm.php";
     public static final String KEY_PHONE = "phone";
     public static final String KEY_OTP = "otp";
     public static final String MyPREFERENCES = "MyPrefs";
@@ -81,6 +89,35 @@ public class LoginActivity extends AppCompatActivity  {
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         preferences = new Preferences(this);
 
+       /* FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(this,  new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                 newToken = instanceIdResult.getToken();
+                Log.e("newToken",newToken);
+
+            }
+        });
+*/
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.e("newToken", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        newToken = task.getResult();
+
+                        // Log and toast
+                        String msg = newToken;
+                        Log.e("newToken", msg);
+                       // Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
         txtCab=findViewById(R.id.cabText);
         Typeface face=Typeface.createFromAsset(getAssets(),"fonts/NunitoExtraBold.ttf");
@@ -94,7 +131,6 @@ public class LoginActivity extends AppCompatActivity  {
             public void onClick(View view) {
                 if (awesomeValidation.validate()) {
                     if (Utils.isNetworkConnectedMainThred(LoginActivity.this)) {
-                        //OtpPopup();
                         Register();
                     } else {
                         Toasty.error(LoginActivity.this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
@@ -135,16 +171,16 @@ public class LoginActivity extends AppCompatActivity  {
                         String user_id=jsonObject.getString("user_id");
                         String user_status=jsonObject.getString("user_status");
                         String role=jsonObject.getString("roll");
+                       // String driver_name=jsonObject.getString("driverName");
 
                         preferences.set("contact_no",number);
                         preferences.set("user_id",user_id);
+                        //preferences.set("driverName",driver_name);
                         preferences.set("user_status",user_status);
                         preferences.set("roll",role);
                         preferences.commit();
 
-
                     }else{
-                        //Toasty.error(LoginActivity.this, "Phone number already registered", Toast.LENGTH_LONG).show();
 
                     }
 
@@ -164,6 +200,7 @@ public class LoginActivity extends AppCompatActivity  {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("contact_no", editNumber.getText().toString());
+                parameters.put("token_id",newToken);
                 return parameters;
             }
         };
@@ -241,15 +278,9 @@ public class LoginActivity extends AppCompatActivity  {
                 dialog.cancel();
 
                 Log.e("forgot password",response);
-                /*if(response.equalsIgnoreCase("OTP Verified successfully")){
-                    startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
-                }else{
-                    Toast.makeText(LoginActivity.this,"Wrong OTP Please Try Again",Toast.LENGTH_LONG).show();
-                    confirmOtp();
 
-                }*/
                 if(response.equalsIgnoreCase("OTP Verified successfully")){
-                    /*if (preferences.get("roll").equalsIgnoreCase("driver"))
+                    if (preferences.get("roll").equalsIgnoreCase("driver"))
                     {
                         Intent i = new Intent(LoginActivity.this, DriverMainActivity.class);
                         startActivity(i);
@@ -263,8 +294,8 @@ public class LoginActivity extends AppCompatActivity  {
                             startActivity(in);
                         }
 
-                    }*/
-                    if (preferences.get("user_status").equalsIgnoreCase("Existing User")){
+                    }
+                  /*  if (preferences.get("user_status").equalsIgnoreCase("Existing User")){
                         Intent i=new Intent(LoginActivity.this,MainActivity.class);
                         startActivity(i);
 
@@ -272,10 +303,8 @@ public class LoginActivity extends AppCompatActivity  {
                         Intent in = new Intent(LoginActivity.this, SignUpActivity.class);
                         startActivity(in);
                     }
-
-                    //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+*/
                 }else{
-                    //Displaying a toast if the otp entered is wrong
                     Toast.makeText(LoginActivity.this,"Wrong OTP Please Try Again",Toast.LENGTH_LONG).show();
                     //Asking user to enter otp again
                      confirmOtp();

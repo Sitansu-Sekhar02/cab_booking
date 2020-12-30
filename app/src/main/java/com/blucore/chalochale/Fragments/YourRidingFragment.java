@@ -50,7 +50,7 @@ import es.dmoral.toasty.Toasty;
 public class YourRidingFragment extends Fragment {
     View v;
     private List<YourRideModel> rideModels;
-    public static final String riding_history = "https://chalochalecab.com/Webservices/getUsersData.php";
+    public static final String riding_history = "https://admin.chalochalecab.com/Webservices/getUsersData.php";
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;

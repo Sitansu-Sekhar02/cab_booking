@@ -38,7 +38,7 @@ import es.dmoral.toasty.Toasty;
 
 public class UpdateUserDetailsFragment extends Fragment {
 
-    public static final String update_userDetails="https://chalochalecab.com/Webservices/update_user_info.php";
+    public static final String update_userDetails="https://admin.chalochalecab.com/Webservices/update_user_info.php";
     EditText EdfirstName,EdlastName;
     Button btnSave;
     Preferences preferences;

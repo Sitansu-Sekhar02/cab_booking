@@ -2,11 +2,14 @@ package com.blucore.chalochale.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,7 +35,7 @@ import es.dmoral.toasty.Toasty;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    public static final String user_info = "https://chalochalecab.com/Webservices/info.php";
+    public static final String user_info ="https://admin.chalochalecab.com/Webservices/info.php";
 
     EditText editTextfirstName;
     public static int backPressed = 0;
@@ -41,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText  editTextlastName;
     Button btnSignup;
     Preferences preferences;
+    Dialog dialog;
 
 
     @Override
@@ -71,7 +75,9 @@ public class SignUpActivity extends AppCompatActivity {
 
                 } else {
                     if (Utils.isNetworkConnectedMainThred(SignUpActivity.this)) {
+                        ProgressForMain();
                         UserInformation();
+                        dialog.show();
                     } else {
                         // Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_LONG).show();
                         Toasty.error(SignUpActivity.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
@@ -79,17 +85,28 @@ public class SignUpActivity extends AppCompatActivity {
                     }
 
                 }
-
-
             }
         });
 
+    }
+    private void ProgressForMain() {
+        dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_for_load);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
     }
 
     private void UserInformation() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST,user_info, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                dialog.cancel();
                 Log.e("info",response);
 
                 try {
@@ -97,7 +114,6 @@ public class SignUpActivity extends AppCompatActivity {
 
                     if(jsonObject.getString("success").equalsIgnoreCase("1"))
                     {
-
                         String full_name=jsonObject.getString("full_name");
                         String first_name=jsonObject.getString("first_name");
                         String last_name=jsonObject.getString("last_name");
@@ -121,6 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                dialog.cancel();
                 Toasty.error(SignUpActivity.this, "Some went wrong ", Toast.LENGTH_SHORT).show();
             }
         }) {

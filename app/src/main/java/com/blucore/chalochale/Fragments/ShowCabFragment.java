@@ -108,6 +108,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     Marker mCurrLocationMarker;
     String id;
     String driver_id;
+    String vehiclyType_id;
     String driver_name;
     String cab_number;
     String driver_image;
@@ -119,8 +120,9 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlngs = new ArrayList<>();
 
-    public static final String cab_list = "https://chalochalecab.com/Webservices/nearest_ride.php";
-    public static final String confirm_ride = "https://chalochalecab.com/Webservices/confirm_user.php";
+    public static final String cab_list = "https://admin.chalochalecab.com/Webservices/vehicle_list.php";
+    public static final String confirm_ride = "https://admin.chalochalecab.com/Webservices/confirm_user.php";
+    public static final String ride_details = "https://admin.chalochalecab.com/Webservices/nearest_ride.php";
 
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
@@ -209,9 +211,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             public void onClick(View view) {
 
                 if (Utils.isNetworkConnectedMainThred(getActivity())) {
-                    ProductProgressBar();
+                    SearchingCabBar();
                     dialog.show();
                     ConfirmRide();
+                    //getRideDetails();
                 } else {
 
                     Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
@@ -244,12 +247,67 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
     }
 
     private void ConfirmRide() {
-        StringRequest rqst = new StringRequest(Request.Method.POST, confirm_ride, new Response.Listener<String>() {
+        StringRequest rqst = new StringRequest(Request.Method.POST, ride_details, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 dialog.cancel();
                 Log.e("confirm_rideDetails", response);
                 replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("success").equalsIgnoreCase("true")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("Cab");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject Object = jsonArray.getJSONObject(i);
+                            //model class
+                            CabBookingModel cabList = new CabBookingModel();
+                            String cab_id = Object.getString("id");
+                            String vehicle_type_id = Object.getString("vehicle_type_id");
+                            // String total_count = Object.getString("total");
+
+                            String driver_id=Object.getString("driver_id");
+                            Log.e("id_driv",""+vehicle_type_id);
+                            Log.e("driver",""+driver_id);
+                            String cab_name = Object.getString("vehicle_type");
+                            String price = Object.getString("price");
+                            String vehicle_company=Object.getString("vehicle_compony");
+                            String cab_image = "http://admin.chalochalecab.com/" + Object.getString("vehicle_image");
+                            String driver_image="http://admin.chalochalecab.com/" + Object.getString("driver_photo");
+                            String cab_number = Object.getString("vehicle_number");
+                            String driver_name = Object.getString("driver_name");
+                            String driver_number = Object.getString("driver_mobile_no");
+                            String otp = Object.getString("otp");
+
+                            preferences.set("driver_id",driver_id);
+                            preferences.commit();
+
+
+                            cabList.setCab_id(cab_id);
+                            cabList.setDriver_id(driver_id);
+                            cabList.setCab_name(cab_name);
+                            cabList.setCab_image(cab_image);
+                            cabList.setCab_price("\u20b9"+price);
+                            cabList.setCab_number(cab_number);
+                            cabList.setDriver_image(driver_image);
+                            cabList.setDriver_name(driver_name);
+                            cabList.setCab_company(vehicle_company);
+                            cabList.setVehicle_type_id(vehicle_type_id);
+                            //cabList.setTotal_count(total_count);
+
+                            cabList.setDriver_number(driver_number);
+                            cabList.setOtp(otp);
+
+
+                            cabListModel.add(cabList);
+                        }
+                        // setAdapter();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -264,8 +322,10 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_id",preferences.get("user_id"));
-                parameters.put("driver_id",driver_id);
-                Log.e("driver_id",""+parameters);
+                //parameters.put("driver_id",driver_id);
+                parameters.put("vehicle_type_id",vehiclyType_id);
+
+                Log.e("vehicle_type_id",""+parameters);
                 //parameters.put("paymentMethod, ","COD" );
                 return parameters;
             }
@@ -287,6 +347,18 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.setCancelable(false);
     }
+    private void SearchingCabBar() {
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_for_searchingcab);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+    }
 
 
     private void CabList() {
@@ -299,38 +371,43 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("success").equalsIgnoreCase("true")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("Cab");
+                        JSONArray jsonArray = jsonObject.getJSONArray("vehicle");
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject Object = jsonArray.getJSONObject(i);
                             //model class
                             CabBookingModel cabList = new CabBookingModel();
-                            String cab_id = Object.getString("id");
-                            String driver_id=Object.getString("driver_id");
+                            //String cab_id = Object.getString("id");
+                            String vehicle_type_id = Object.getString("vehicle_type_id");
+                            String total_count = Object.getString("total");
+                            //String driver_id=Object.getString("driver_id");
                             Log.e("id_driv",""+driver_id);
                             String cab_name = Object.getString("vehicle_type");
                             String price = Object.getString("price");
-                            String vehicle_company=Object.getString("vehicle_compony");
+                           // String vehicle_company=Object.getString("vehicle_compony");
                             String cab_image = "http://admin.chalochalecab.com/" + Object.getString("vehicle_image");
-                            String driver_image="http://admin.chalochalecab.com/" + Object.getString("driver_photo");
+                            //String driver_image="http://admin.chalochalecab.com/" + Object.getString("driver_photo");
 
-                            String cab_number = Object.getString("vehicle_number");
-                            String driver_name = Object.getString("driver_name");
-                            String driver_number = Object.getString("driver_mobile_no");
+                            //String cab_number = Object.getString("vehicle_number");
+                            //String driver_name = Object.getString("driver_name");
+                            //String driver_number = Object.getString("driver_mobile_no");
                             preferences.set("driver_id",driver_id);
                             preferences.commit();
 
 
-                            cabList.setCab_id(cab_id);
-                            cabList.setDriver_id(driver_id);
+                            //cabList.setCab_id(cab_id);
+                           // cabList.setDriver_id(driver_id);
                             cabList.setCab_name(cab_name);
                             cabList.setCab_image(cab_image);
                             cabList.setCab_price("\u20b9"+price);
-                            cabList.setCab_number(cab_number);
-                            cabList.setDriver_image(driver_image);
-                            cabList.setDriver_name(driver_name);
-                            cabList.setCab_company(vehicle_company);
-                            cabList.setDriver_number(driver_number);
+                            //cabList.setCab_number(cab_number);
+                            //cabList.setDriver_image(driver_image);
+                            //cabList.setDriver_name(driver_name);
+                            //cabList.setCab_company(vehicle_company);
+                            cabList.setVehicle_type_id(vehicle_type_id);
+                            cabList.setTotal_count(total_count);
+
+                            //cabList.setDriver_number(driver_number);
                             cabListModel.add(cabList);
                         }
                         setAdapter();
@@ -363,7 +440,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_id",preferences.get("user_id"));
-                //parameters.put("id", String.valueOf(166));
+
                 return parameters;
             }
         };
@@ -669,8 +746,20 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    id = mModel.get(position).getCab_id();
-                    driver_id=mModel.get(position).getDriver_id();
+                    id = mModel.get(position).getVehicle_type_id();
+                    Log.e("id", "" + id);
+
+
+                    vehiclyType_id=id;
+
+                   /* driver_id=mModel.get(position).getDriver_id();
+                    Log.e("driver_id", "" + driver_id);
+
+                    driver_id2=driver_id;*/
+                    //getRideDetails();
+                    //id = mModel.get(position).getCab_id();
+
+                    /*driver_id=mModel.get(position).getDriver_id();
                     Log.e("drivers_id", "" + driver_id);
 
                     driver_name=mModel.get(position).getDriver_name();
@@ -688,9 +777,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                     vehicle_number=cab_number;
                     vehicle_type=cab_type;
                     total_bookPrice=cab_bookPrices;
-                    driver_number=driver_no;
-
-
+                    driver_number=driver_no;*/
 
                     int previousItem = selectedItem;
                     selectedItem = position;
@@ -724,6 +811,93 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
             }
         }
+    }
+
+    private void getRideDetails() {
+        StringRequest request = new StringRequest(Request.Method.POST, ride_details, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                dialog.cancel();
+                Log.e("cab_list", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if (jsonObject.getString("success").equalsIgnoreCase("true")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("Cab");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject Object = jsonArray.getJSONObject(i);
+                            //model class
+                            CabBookingModel cabList = new CabBookingModel();
+                            String cab_id = Object.getString("id");
+                            String vehicle_type_id = Object.getString("vehicle_type_id");
+                           // String total_count = Object.getString("total");
+
+                            String driver_id=Object.getString("driver_id");
+                            Log.e("id_driv",""+vehicle_type_id);
+                            //Log.e("driver",""+driver_id);
+                            String cab_name = Object.getString("vehicle_type");
+                            String price = Object.getString("price");
+                            String vehicle_company=Object.getString("vehicle_compony");
+                            String cab_image = "http://admin.chalochalecab.com/" + Object.getString("vehicle_image");
+                            String driver_image="http://admin.chalochalecab.com/" + Object.getString("driver_photo");
+                            String cab_number = Object.getString("vehicle_number");
+                            String driver_name = Object.getString("driver_name");
+                            String driver_number = Object.getString("driver_mobile_no");
+                            String otp = Object.getString("otp");
+
+                            preferences.set("driver_id",driver_id);
+                            preferences.commit();
+
+
+                            cabList.setCab_id(cab_id);
+                            cabList.setDriver_id(driver_id);
+                            cabList.setCab_name(cab_name);
+                            cabList.setCab_image(cab_image);
+                            cabList.setCab_price("\u20b9"+price);
+                            cabList.setCab_number(cab_number);
+                            cabList.setDriver_image(driver_image);
+                            cabList.setDriver_name(driver_name);
+                            cabList.setCab_company(vehicle_company);
+                            cabList.setVehicle_type_id(vehicle_type_id);
+                            //cabList.setTotal_count(total_count);
+
+                            cabList.setDriver_number(driver_number);
+                            cabList.setOtp(otp);
+
+
+                            cabListModel.add(cabList);
+                        }
+                       // setAdapter();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.cancel();
+                Log.e("error_response", "" + error);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("user_id",preferences.get("user_id"));
+                parameters.put("vehicle_type_id",vehiclyType_id);
+                //parameters.put("id", String.valueOf(166));
+                return parameters;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(request);
+
     }
 }
 

@@ -13,12 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Working"
+            android:text="Status"
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:checked="true"
+            android:textOff="OFF"
+            android:textOn="ON"
             android:background="@drawable/button_border"
             android:layout_margin="10sp"
             android:id="@+id/workingSwitch"/>
@@ -56,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/customerDestination"
                     android:paddingBottom="10sp"
-                    android:text="Destination: --"/>
+                    android:text="Destination:"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
