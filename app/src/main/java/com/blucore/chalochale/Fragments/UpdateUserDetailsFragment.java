@@ -163,7 +163,7 @@ public class UpdateUserDetailsFragment extends Fragment {
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 }

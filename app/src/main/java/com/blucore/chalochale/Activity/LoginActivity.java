@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -32,10 +33,14 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.blucore.chalochale.BroadCastReceiver.SmsReceiver;
 import com.blucore.chalochale.Driver.DriverMainActivity;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -97,7 +102,28 @@ public class LoginActivity extends AppCompatActivity  {
 
             }
         });
+
+
 */
+
+        SmsRetrieverClient client = SmsRetriever.getClient(LoginActivity.this);
+        Task<Void> task = client.startSmsRetriever();
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Android will provide message once receive. Start your broadcast receiver.
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(SmsRetriever.SMS_RETRIEVED_ACTION);
+                registerReceiver(new SmsReceiver(), filter);
+            }
+        });
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // Failed to start retriever, inspect Exception for more details
+            }
+        });
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
 
@@ -171,11 +197,10 @@ public class LoginActivity extends AppCompatActivity  {
                         String user_id=jsonObject.getString("user_id");
                         String user_status=jsonObject.getString("user_status");
                         String role=jsonObject.getString("roll");
-                       // String driver_name=jsonObject.getString("driverName");
-
+                        String driver_name=jsonObject.getString("driverName");
                         preferences.set("contact_no",number);
                         preferences.set("user_id",user_id);
-                        //preferences.set("driverName",driver_name);
+                        preferences.set("driverName",driver_name);
                         preferences.set("user_status",user_status);
                         preferences.set("roll",role);
                         preferences.commit();
@@ -241,8 +266,8 @@ public class LoginActivity extends AppCompatActivity  {
             public void onClick(View view) {
 
                 if (Utils.isNetworkConnectedMainThred(LoginActivity.this)) {
-                    ProgressForSignup();
-                    dialog.show();
+                    //ProgressForSignup();
+                    //dialog.show();
                     ConfirmLoginOtp(otpTextView.getOTP());
 
                 } else {
@@ -253,6 +278,7 @@ public class LoginActivity extends AppCompatActivity  {
         });
 
     }
+
 
     private void ProgressForSignup() {
         dialog = new Dialog(LoginActivity.this, android.R.style.Theme_Translucent_NoTitleBar);
@@ -268,15 +294,15 @@ public class LoginActivity extends AppCompatActivity  {
     }
 
     private void ConfirmLoginOtp(final String otp) {
-       // final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Authenticating", "Please wait while we check the entered code", false,false);
+        final ProgressDialog loading = ProgressDialog.show(LoginActivity.this, "Authenticating", "Please wait while we check the entered code", false,false);
         //startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
        // final String otp = editTextConfirmOtp.getText().toString().trim();
 
         StringRequest request = new StringRequest(Request.Method.POST, confirm_otp, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                dialog.cancel();
-
+                //dialog.cancel();
+                loading.cancel();
                 Log.e("forgot password",response);
 
                 if(response.equalsIgnoreCase("OTP Verified successfully")){
@@ -314,7 +340,8 @@ public class LoginActivity extends AppCompatActivity  {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dialog.cancel();
+                //dialog.cancel();
+                loading.cancel();
                 Log.e("error_response", "" + error);
             }
         }){

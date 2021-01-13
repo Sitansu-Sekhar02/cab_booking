@@ -41,8 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:src="@drawable/mini_countryman"/>
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -64,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:text="Estimated time"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
                 <TextView

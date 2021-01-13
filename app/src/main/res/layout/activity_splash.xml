@@ -15,7 +15,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
-        android:src="@drawable/wwww"
+        android:src="@drawable/chalochalo_logo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,15 +24,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/textlogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:fontFamily="cursive"
         android:textStyle="bold"
-        android:textSize="@dimen/_40sdp"
-        android:textColor="#ffff"
+        android:textSize="@dimen/_45sdp"
+        android:textColor="#0B0B0B"
         android:text="Chalo Chale Cab"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,16 +40,16 @@
 
     <TextView
         android:id="@+id/textSlogan"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:fontFamily="@font/antic"
         android:text="We are always there at your service."
         android:textColor="#ffffff"
-        android:textSize="@dimen/_18sdp"
+        android:textSize="@dimen/_16sdp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textlogo" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

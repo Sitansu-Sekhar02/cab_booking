@@ -19,23 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_20sdp">
 
-            <TextView
-                android:id="@+id/tvAlertMsg"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:text="Confirmation Alert"
-                android:background="#FDC419"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp" />
-
-            <View
-                android:id="@+id/view1"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_below="@+id/tvAlertMsg"
-                android:background="@color/dark_grey" />
 
             <RelativeLayout
                 android:id="@+id/rr"
@@ -47,11 +30,12 @@
                     android:id="@+id/textView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Are you sure?\nYou want to cancel the Ride"
                     android:gravity="center"
-                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/_18sdp"
                     android:minHeight="@dimen/_50sdp"
-                    android:textColor="@color/black_trans"
+                    android:textColor="#000"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="@dimen/_10sdp"
                     />
@@ -61,18 +45,19 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_below="@+id/rr"
                 android:background="@color/grey_300" />
 
             <TextView
-                android:id="@+id/tvcancel"
+                android:id="@+id/tvNo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:text="NO"
-                android:textColor="@color/red_900"
+                android:textStyle="bold"
+                android:textColor="#FB4005"
                 android:textSize="@dimen/_11sdp"
                 android:layout_below="@+id/rr"
                 android:layout_alignParentRight="true"
@@ -83,21 +68,22 @@
 
             <View
                 android:id="@+id/view4"
-                android:layout_width="0.5dp"
+                android:layout_width="1dp"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_below="@+id/view"
                 android:layout_centerHorizontal="true"
-                android:background="@color/grey_200" />
+                android:background="@color/grey_300" />
 
             <TextView
-                android:id="@+id/tvOk"
+                android:id="@+id/tvYes"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:layout_below="@+id/view"
                 android:text="YES"
-                android:textColor="#08A50E"
+                android:textColor="#F6BA04"
+                android:textStyle="bold"
                 android:textSize="@dimen/_11sdp"
                 android:layout_toLeftOf="@+id/view4"
                 android:layout_toStartOf="@+id/view4"

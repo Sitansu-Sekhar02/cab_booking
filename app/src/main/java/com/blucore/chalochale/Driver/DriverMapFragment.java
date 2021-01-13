@@ -2,7 +2,10 @@ package com.blucore.chalochale.Driver;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +18,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +43,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.blucore.chalochale.Activity.GPSTracker;
+import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.Fragments.DirectionFinderListener;
 import com.blucore.chalochale.Model.CabBookingModel;
 import com.blucore.chalochale.R;
@@ -77,15 +85,23 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, DirectionFinderListener {
 
+    public BackgroundLocationService gpsService;
+    private final int PERMISSION_REQUEST_CODE = 200;
+    public boolean mTracking = false;
+
+
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Dialog dialog;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
+    Double latitute,longitute;
+
     SwitchCompat mWorkingSwitch;
-    final int LOCATION_REQUEST_CODE = 1;
+
     public static final String driver_status_url = "https://admin.chalochalecab.com/Webservices/driverStatus.php";
+    public static final String latlng_driver = "https://admin.chalochalecab.com/Webservices/map_records.php";
 
 
     Preferences preferences;
@@ -98,6 +114,23 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
         preferences=new Preferences(getActivity());
 
 
+       /* final Intent intent = new Intent(getActivity(), BackgroundLocationService.class);
+        getActivity().startService(intent);
+        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);*/
+
+        GPSTracker mGPS = new GPSTracker(getActivity());
+
+        if (mGPS.canGetLocation()) {
+            mGPS.getLocation();
+            latitute = mGPS.getLatitude();
+            longitute = mGPS.getLongitude();
+        } else {
+            System.out.println("Unable");
+        }
+        //for getting driver latlang
+        //getDriverLatlng(latitute,longitute);
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
@@ -105,6 +138,7 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         mWorkingSwitch = view.findViewById(R.id.workingSwitch);
         SharedPreferences sharedPrefs = getActivity().getSharedPreferences("com.blucore.chalochale.Driver", MODE_PRIVATE);
         mWorkingSwitch.setChecked(sharedPrefs.getBoolean("value",true));
@@ -139,15 +173,76 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
         return view;
     }
 
+/*
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            String name = className.getClassName();
+            if (name.endsWith("BackgroundLocationService")) {
+                gpsService = ((BackgroundLocationService.LocationServiceBinder) service).getService();
+                //startButton.setEnabled(true);
+                //statusTextView.setText("GPS Ready");
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            if (className.getClassName().equals("BackgroundLocationService")) {
+                gpsService = null;
+            }
+        }
+    };
+*/
+
+    private void getDriverLatlng(final Double latitute, final Double longitute) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, latlng_driver, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                //dialog.cancel();
+                Log.e("driver latlng", response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
+                    {
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //dialog.cancel();
+                Log.e("error_response", "" + error);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("driverMobileNo",preferences.get("contact_no"));
+                //parameters.put("user_id", preferences.get("user_id"));
+                parameters.put("latitude", String.valueOf(latitute));
+                parameters.put("longitude", String.valueOf(longitute));
+                Log.e("driver_latlang",""+parameters);
+
+                return parameters;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(request);
+
+
+    }
+
     private void disconnectDriver() {
 
     }
 
     private void DriverStatus(final String status) {
-       /* if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);*/
         StringRequest request = new StringRequest(Request.Method.POST, driver_status_url, new Response.Listener<String>() {
 
             @Override
@@ -329,13 +424,13 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
-
+            }
         } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);

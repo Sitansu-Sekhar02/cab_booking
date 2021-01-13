@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splashscreen"
+    android:background="@drawable/banner2"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,6 @@
                 android:layout_marginBottom="@dimen/_30sdp"
                 android:layout_height="match_parent">
 
-
             <TextView
                 android:id="@+id/cabText"
                 android:layout_width="match_parent"
@@ -41,7 +40,7 @@
                 android:drawablePadding="@dimen/_6sdp"
                 android:textSize="@dimen/_18sdp"
                 android:padding="@dimen/_4sdp"
-                android:text="Explore new ways to travel with Chalo chale cab."
+                android:text="Explore new ways to travel with Chalo Chale Cab."
                 android:textColor="#090909"
                 android:layout_marginRight="@dimen/_5sdp" />
             <LinearLayout

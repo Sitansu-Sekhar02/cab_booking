@@ -41,19 +41,23 @@
                     android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:layout_height="@dimen/_30sdp"
                     android:drawablePadding="@dimen/_5sdp"
-                    android:hint="Your first name"
+                    android:hint="First name"
                     android:singleLine="true"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@null"
                     android:id="@+id/edfirstName"
                     />
 
-                <View
-                    android:layout_below="@+id/edfirstName"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp" />
+
 
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="#afafaf" />
+
 
             <RelativeLayout
                 android:layout_marginLeft="@dimen/_10sdp"
@@ -68,26 +72,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="LastName*"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
                 <EditText
                     android:layout_below="@+id/tvAddress"
                     android:layout_width="match_parent"
                     android:paddingLeft="@dimen/_5sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:hint="Your last name"
-                    android:drawableLeft="@drawable/ic_call"
+                    android:hint="Last name"
+                    android:drawableLeft="@drawable/ic_baseline_person_24"
                     android:singleLine="true"
                     android:drawablePadding="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@null"
                     android:id="@+id/edlastName"
                     />
-                <View
-                    android:layout_below="@+id/edlastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp" />
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:background="#afafaf" />
+
 
             <Button
                 android:id="@+id/btnSave"
@@ -99,6 +105,7 @@
                 android:textAlignment="center"
                 android:layout_margin="@dimen/_20sdp"
                 android:textColor="@color/white"
+                android:textStyle="bold"
                 android:textSize="@dimen/_15sdp"
                 tools:ignore="RtlCompat" />
         </LinearLayout>

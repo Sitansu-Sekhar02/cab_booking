@@ -102,7 +102,6 @@
                         android:drawablePadding="@dimen/_5sdp"
                         android:textStyle="bold"
                         android:textColor="#000"
-                        android:paddingLeft="@dimen/_8sdp"
                         android:layout_margin="@dimen/_5sdp"
                         android:layout_height="wrap_content"/>
                     <View
@@ -125,7 +124,6 @@
                         android:drawableLeft="@drawable/ic_baseline_person_24"
                         android:drawablePadding="@dimen/_5sdp"
                         android:textColor="#000"
-                        android:paddingLeft="@dimen/_8sdp"
                         android:textStyle="bold"
                         android:layout_height="wrap_content"/>
                     <View
@@ -144,7 +142,6 @@
                         android:id="@+id/phone_number"
                         android:layout_width="match_parent"
                         android:textSize="@dimen/_16sdp"
-                        android:paddingLeft="@dimen/_8sdp"
                         android:textStyle="bold"
                         android:drawableLeft="@drawable/ic_call"
                         android:drawablePadding="@dimen/_5sdp"

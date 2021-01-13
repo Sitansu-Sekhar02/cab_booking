@@ -62,19 +62,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 
 import org.json.JSONException;
@@ -133,9 +129,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         //Log.e("token",preferences.get("token"));
 
 
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
-        }*/
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -285,7 +281,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_id", preferences.get("user_id"));
-                parameters.put("customer_name", preferences.get("full_name"));
+                //parameters.put("customer_name", preferences.get("full_name"));
                 parameters.put("customer_mobile_no", preferences.get("contact_no"));
                 parameters.put("from_address", sSource);
                 parameters.put("to_address", sDestination);
@@ -404,7 +400,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         //ProgressForMain();
-       // dialog.show();
+        //dialog.show();
 
         /*ArrayList<LatLng> locations = new ArrayList();
         locations.add(new LatLng(latitute, longitute ));
@@ -426,12 +422,14 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
+               // dialog.cancel();
 
             }
         }
          else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
+            //dialog.cancel();
         }
        /* LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -571,7 +569,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         bundle.putString("destination",sDestination);
         fragment.setArguments(bundle);
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 
@@ -642,8 +640,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         }
 
 
-
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.marker2)).title("Your Location");
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_golf_course_24)).title("Your Location");
         //dialog.cancel();
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

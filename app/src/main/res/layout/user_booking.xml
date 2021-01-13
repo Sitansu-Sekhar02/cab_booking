@@ -13,6 +13,7 @@
         android:layout_height="match_parent" />
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/driver_details"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
@@ -29,7 +30,7 @@
                 android:id="@+id/callDriver"
                 android:layout_width="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_8sdp"
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_width="match_parent"
@@ -57,7 +58,7 @@
             android:id="@+id/cancelRide"
             android:layout_width="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="match_parent"
@@ -83,7 +84,7 @@
             android:id="@+id/shareRide"
             android:layout_width="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginLeft="@dimen/_8sdp"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_width="match_parent"
@@ -99,11 +100,40 @@
                 android:text="Share"
                 android:textSize="@dimen/_12sdp" />
         </LinearLayout>
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"/>
+
+
+            <LinearLayout
+                android:id="@+id/track_Mylocation"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/_8sdp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_baseline_my_location_24" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textAllCaps="false"
+                    android:text="Track Location"
+                    android:textSize="@dimen/_12sdp" />
+            </LinearLayout>
+
 
         </LinearLayout>
 
     </RelativeLayout>
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:id="@+id/TaxiHorizontal"
         android:layout_above="@+id/driver_details"
@@ -178,7 +208,10 @@
 
         </LinearLayout>
     </RelativeLayout>
+
     <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/otp_lnr"
         android:layout_width="match_parent"
         android:background="#FCFDF8F8"
         android:layout_above="@+id/paymentDetails"
@@ -195,8 +228,8 @@
             android:textStyle="bold"
             android:text="OTP"/>
     </LinearLayout>
-
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/paymentDetails"
         android:layout_width="match_parent"
         android:layout_above="@+id/TaxiHorizontal"

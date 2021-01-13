@@ -3,6 +3,7 @@ package com.blucore.chalochale.Fragments;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,12 +12,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,12 +29,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -48,6 +52,8 @@ import com.android.volley.toolbox.Volley;
 import com.blucore.chalochale.Activity.GPSTracker;
 import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.Activity.Utils;
+import com.blucore.chalochale.Driver.DriverRouteActivity;
+import com.blucore.chalochale.FirebaseClasses.MyCabFirebaseService;
 import com.blucore.chalochale.Model.CabBookingModel;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.DirectionFinder;
@@ -64,7 +70,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -85,6 +90,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
@@ -94,8 +101,8 @@ import static com.blucore.chalochale.Activity.MainActivity.tvHeaderText;
 
 public class BookCabFragment extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
     Location currentLocation;
-    public static final String ride_details = "https://admin.chalochalecab.com/Webservices/confirm_user.php";
-
+    public static final String ride_details = "https://admin.chalochalecab.com/Webservices/select_driver_details.php";
+    public static final String cancel_booking = "https://admin.chalochalecab.com/Webservices/user_cancel_ride.php";
 
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
@@ -104,7 +111,6 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     private GoogleMap mMap;
     EditText dropLoc;
     Double latitute,longitute;
-    private static final int REQUEST_SELECT_PLACE = 101;
     private MarkerOptions options = new MarkerOptions();
     private ArrayList<LatLng> latlngs = new ArrayList<>();
 
@@ -119,6 +125,14 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     TextView driver_name;
     TextView vehicle_name;
     TextView vehicle_number;
+
+    RelativeLayout driver_details;
+    RelativeLayout TaxiHorizontal;
+    LinearLayout otp_lnr;
+    LinearLayout track_Mylocation;
+    RelativeLayout paymentDetails;
+
+    LinearLayout cancelRide;
     TextView total_bookPrice;
     TextView user_otp;
     private List<CabBookingModel> cabListModel;
@@ -134,8 +148,11 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     String driver_number2;
     String otp;
 
+    String sources;
+    String destinations;
 
 
+    Button google_pay;
 
 
     Double lat,lng;
@@ -160,8 +177,18 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         driver_name=view.findViewById(R.id.driver_name);
         vehicle_name=view.findViewById(R.id.vehicle_name);
         vehicle_number=view.findViewById(R.id.vehicle_number);
+        cancelRide=view.findViewById(R.id.cancelRide);
         total_bookPrice=view.findViewById(R.id.total_price);
         user_otp=view.findViewById(R.id.otp);
+        track_Mylocation=view.findViewById(R.id.track_Mylocation);
+
+        google_pay=view.findViewById(R.id.google_pay);
+
+         driver_details=view.findViewById(R.id.driver_details);
+        TaxiHorizontal=view.findViewById(R.id.TaxiHorizontal);
+        otp_lnr=view.findViewById(R.id.otp_lnr);
+        paymentDetails=view.findViewById(R.id.paymentDetails);
+
 
         preferences=new Preferences(getActivity());
         cabListModel = new ArrayList<>();
@@ -172,13 +199,17 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             ProductProgressBar();
             dialog.show();
             RideDetails();
+         /*   new Handler().postDelayed(new Runnable(){
+                @Override
+                public void run() {
+
+                }
+            }, 0);*/
 
         } else {
 
             Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
         }
-
-
 
         tvHeaderText.setVisibility(View.GONE);
         MainActivity.iv_menu.setOnClickListener(new View.OnClickListener() {
@@ -189,30 +220,12 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
                 getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
             }
         });
-        callDriver.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+driver_number2));
-                startActivity(intent);
-            }
-        });
-        shareRide.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent shareIntent =new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                String shareBody="Your body here";
-                String subject="Your subject here";
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT,subject);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
-                startActivity(Intent.createChooser(shareIntent, "Share via"));
-            }
-        });
+
+
         Bundle ba = getArguments();
-        String sources = ba.getString("source");
-        String destinations = ba.getString("destination");
-        getLocationFromAddress(destinations);
+         sources = ba.getString("source");
+         destinations = ba.getString("destination");
+         getLocationFromAddress(destinations);
         // Log.e("destination",""+getLocationFromAddress());
 
         try {
@@ -233,74 +246,231 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         return view;
     }
 
+    private void CancelRideBooking() {
+        final Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.cancel_book);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.show();
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+
+        //findId
+        TextView tvYes = (TextView) dialog.findViewById(R.id.tvYes);
+        TextView tvCancel = (TextView) dialog.findViewById(R.id.tvNo);
+
+
+        dialog.show();
+
+        //set listener
+        tvYes.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(View v) {
+                LoaderProgress();
+                CancelRide();
+                dialog.show();
+            }
+        });
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void LoaderProgress() {
+        dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.progress_for_load);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.setCancelable(false);
+    }
+
+    private void CancelRide() {
+        StringRequest request = new StringRequest(Request.Method.POST, cancel_booking, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                dialog.cancel();
+                Log.e("cancel_ride", response);
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
+                    {
+                        Intent intent=new Intent(getActivity(),MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.cancel();
+                Log.e("error_response", "" + error);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> parameters = new HashMap<String, String>();
+                parameters.put("user_id", preferences.get("user_id"));
+                parameters.put("driver_mobile_no",driver_number2);
+                return parameters;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(request);
+
+    }
+
     private void RideDetails() {
         StringRequest rqst = new StringRequest(Request.Method.POST, ride_details, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 dialog.cancel();
-                Log.e("confirm_rideDetails", response);
+                Log.e("ride_details",""+ response.length());
                 //replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
                 try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if (jsonObject.getString("success").equalsIgnoreCase("true")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("driver_details");
+                    JSONObject JSNobject = new JSONObject(response);
+                    if (JSNobject.getString("success").equalsIgnoreCase("true")) {
+                        Log.e("responsess",""+JSNobject);
+
+                        JSONArray jsonArray = JSNobject.getJSONArray("get_driver_details");
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject Object = jsonArray.getJSONObject(i);
                             //model class
-                            CabBookingModel cabList = new CabBookingModel();
+                             CabBookingModel cabList = new CabBookingModel();
                              cab_id = Object.getString("id");
-                             vehicle_no = Object.getString("vehicle_no");
-                            // String total_count = Object.getString("total");
-
-                             //driver_id=Object.getString("driver_id");
-                            //Log.e("id_driv",""+vehicle_type_id);
-                            //Log.e("driver",""+driver_id);
+                              driver_id = Object.getString("driver_id");
+                            vehicle_no = Object.getString("vehicle_no");
                              cab_name = Object.getString("vehicle_type");
                              price = Object.getString("total_price");
                              vehicle_company=Object.getString("vehicle_compony");
-                           // String cab_image = "http://admin.chalochalecab.com/" + Object.getString("vehicle_image");
                              driver_images="http://admin.chalochalecab.com/" + Object.getString("driver_image");
                             //String cab_number = Object.getString("vehicle_number");
                              driver_name2 = Object.getString("driver_name");
                              driver_number2 = Object.getString("driverMobileNo");
                              otp = Object.getString("otp");
 
-                            preferences.set("driver_id",driver_id);
-                            preferences.commit();
-
 
                             cabList.setCab_id(cab_id);
-                           // cabList.setDriver_id(driver_id);
                             cabList.setCab_name(cab_name);
-                            //cabList.setCab_image(cab_image);
                             cabList.setCab_price(price);
+                            cabList.setDriver_id(driver_id);
                            // cabList.setCab_number(cab_number);
                             cabList.setDriver_image(driver_images);
                             cabList.setDriver_name(driver_name2);
                             cabList.setCab_company(vehicle_company);
                             cabList.setVehicle_type_id(vehicle_no);
-                            //cabList.setTotal_count(total_count);
-
                             cabList.setDriver_number(driver_number2);
                             cabList.setOtp(otp);
 
                             cabListModel.add(cabList);
                         }
+
+                        driver_details.setVisibility(View.VISIBLE);
+                        TaxiHorizontal.setVisibility(View.VISIBLE);
+                        otp_lnr.setVisibility(View.VISIBLE);
+                        paymentDetails.setVisibility(View.VISIBLE);
+                        track_Mylocation.setVisibility(View.VISIBLE);
+
                         driver_name.setText(driver_name2);
-                        //Log.e("driver_name","",+driver_name);
                         vehicle_name.setText(vehicle_company);
                         vehicle_number.setText(vehicle_no);
                         total_bookPrice.setText("\u20b9"+price);
                         user_otp.setText("OTP :"+otp);
 
-                        //driver_image.setImageResource(ShowCabFragment.driver_images);
-
                         Glide.with(getActivity())
                                 .load(driver_images)
                                 .into(driver_image);
 
-                        // setAdapter();
+                        cancelRide.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if (Utils.isNetworkConnectedMainThred(getActivity())) {
+                                    CancelRideBooking();
+                                } else {
+
+                                    Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                                }
+                                // CancelRideBooking();
+
+                            }
+                        });
+                        callDriver.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(Intent.ACTION_DIAL);
+                                intent.setData(Uri.parse("tel:"+driver_number2));
+                                startActivity(intent);
+                            }
+                        });
+                        shareRide.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent shareIntent =new Intent(Intent.ACTION_SEND);
+                                shareIntent.setType("text/plain");
+                                String shareBody="Your body here";
+                                String subject="Your subject here";
+                                shareIntent.putExtra(Intent.EXTRA_SUBJECT,subject);
+                                shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+                                startActivity(Intent.createChooser(shareIntent, "Share via"));
+                            }
+                        });
+
+                        google_pay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                        track_Mylocation.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (Utils.isNetworkConnectedMainThred(getActivity())) {
+
+                                    GetMyLocation(sources,destinations);
+
+                                } else {
+                                    // Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_LONG).show();
+                                    Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_LONG).show();
+
+                                }
+                            }
+                        });
+
+                    }else {
+
+                        ProductProgressBar();
+                        dialog.show();
+                        RideDetails();
+
+                          /*  new Handler().postDelayed(new Runnable(){
+                                @Override
+                                public void run() {
+                                    *//* Create an Intent that will start the Menu-Activity. *//*
+
+                                }
+                            }, 100);*/
 
                     }
 
@@ -321,10 +491,8 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_id",preferences.get("user_id"));
-                parameters.put("driver_id", String.valueOf(1));
-
-                //Log.e("vehicle_type_id",""+parameters);
-                //parameters.put("paymentMethod, ","COD" );
+                Log.e("paramaet",""+parameters);
+                //parameters.put("driver_id", MyCabFirebaseService.driver_id);
                 return parameters;
             }
         };
@@ -333,10 +501,28 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
 
     }
 
+    private void GetMyLocation(String sources, String destinations) {
+
+        try {
+            Uri uri=Uri.parse("https://www.google.co.in/maps/dir/"+sources+"/"+destinations);
+            Intent intent=new Intent(Intent.ACTION_VIEW,uri);
+            intent.setPackage("com.google.android.apps.maps");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }catch (ActivityNotFoundException e){
+            Uri uri=Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps,maps");
+            Intent intent=new Intent(Intent.ACTION_VIEW,uri);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+        }
+
+    }
+
     private void ProductProgressBar() {
         dialog = new Dialog(getActivity(), android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.progress_for_searchingcab);
+        dialog.setContentView(R.layout.progress_for_lookingcab);
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;
@@ -428,7 +614,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 

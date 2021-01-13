@@ -31,15 +31,16 @@
                         android:layout_margin="@dimen/_10sdp"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/total_distance"
+                            android:id="@+id/otp_verify"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="OTP:2314"
+                            android:text="Request for New Ride"
                             android:gravity="center"
                             android:textSize="@dimen/_20sdp"
                             android:textStyle="bold"
                             android:textColor="#000"/>
                     </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/_10sdp"
@@ -93,7 +94,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="User Number"
+                            android:text="User Number :"
                             android:textSize="@dimen/_15sdp"
                             android:textStyle="bold"
                             android:textColor="#000"/>
@@ -143,12 +144,6 @@
 
                     </LinearLayout>
                 </LinearLayout>
-
-
-
-
-
-
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>

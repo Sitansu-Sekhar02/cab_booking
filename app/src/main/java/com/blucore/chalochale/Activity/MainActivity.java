@@ -17,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,12 +33,9 @@ import com.blucore.chalochale.Fragments.SupportFragment;
 import com.blucore.chalochale.Fragments.UserProfileFragment;
 import com.blucore.chalochale.Fragments.YourRidingFragment;
 import com.blucore.chalochale.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 
 import com.blucore.chalochale.extra.Preferences;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     public static int backPressed = 0;
@@ -103,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView tvUserContact = (TextView) navigationView.findViewById(R.id.tvUserContact);
 
                 tvUsername.setText(preferences.get("first_name"));
-                tvUserContact.setText(preferences.get("contact_no"));
+                tvUserContact.setText("+91-"+preferences.get("contact_no"));
 
             }
         });
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 
@@ -200,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
 //                pref.set(AppSettings.CustomerID, "");
 //                pref.commit();
-
                 preferences.set("user_id","");
                 preferences.set("roll","");
                 preferences.commit();

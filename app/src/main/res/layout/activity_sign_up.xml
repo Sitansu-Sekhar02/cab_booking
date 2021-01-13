@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/splashscreen">
+    android:background="@drawable/banner2">
     <ScrollView
         android:layout_width="match_parent"
         android:fillViewport="true"
@@ -34,7 +34,7 @@
                     android:drawablePadding="@dimen/_6sdp"
                     android:textSize="@dimen/_18sdp"
                     android:padding="@dimen/_4sdp"
-                    android:text="Explore new ways to travel with Chalo chale cab."
+                    android:text="Explore new ways to travel with Chalo Chale Cab."
                     android:textColor="#090909"
                     android:layout_marginRight="@dimen/_5sdp" />
                 <LinearLayout

@@ -3,7 +3,6 @@ package com.blucore.chalochale.Fragments;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -308,7 +307,7 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 }

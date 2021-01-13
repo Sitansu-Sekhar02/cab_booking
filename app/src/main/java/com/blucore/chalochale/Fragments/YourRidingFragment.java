@@ -30,7 +30,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.blucore.chalochale.Activity.MainActivity;
 import com.blucore.chalochale.Activity.Utils;
-import com.blucore.chalochale.Model.CabBookingModel;
 import com.blucore.chalochale.Model.YourRideModel;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
@@ -40,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,7 +212,7 @@ public class YourRidingFragment extends Fragment {
 
         //bundle.putString("order_date_month",);
         fragment.setArguments(bundle);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
 

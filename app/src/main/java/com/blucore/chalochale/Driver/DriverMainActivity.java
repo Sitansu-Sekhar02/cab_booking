@@ -28,12 +28,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.blucore.chalochale.Activity.LoginActivity;
-import com.blucore.chalochale.Activity.MainActivity;
-import com.blucore.chalochale.Fragments.AboutUsFragment;
-import com.blucore.chalochale.Fragments.DashboardFragment;
-import com.blucore.chalochale.Fragments.SupportFragment;
-import com.blucore.chalochale.Fragments.UserProfileFragment;
-import com.blucore.chalochale.Fragments.YourRidingFragment;
 import com.blucore.chalochale.R;
 import com.blucore.chalochale.extra.Preferences;
 import com.google.android.material.navigation.NavigationView;
@@ -58,6 +52,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         tvHeaderText = findViewById(R.id.tvHeaderText);
 
         tvHeaderText.setText("Chalo Chale Cab");
+
         replaceFragmentWithAnimation(new DriverMapFragment());
 
         drawer.closeDrawer(GravityCompat.START);
@@ -96,7 +91,7 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
     public void replaceFragmentWithAnimation(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        transaction.replace(R.id.main_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
     @Override
