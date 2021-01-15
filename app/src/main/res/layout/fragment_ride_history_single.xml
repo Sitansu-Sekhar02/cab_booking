@@ -8,7 +8,7 @@
     android:orientation="vertical">
     <fragment
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/_200sdp"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/ridehistorymap"/>
     <LinearLayout
@@ -183,8 +183,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
             android:src="@drawable/ic_taxi_black"/>
 
         <LinearLayout
@@ -195,8 +195,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20sp">
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_20sdp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="@dimen/_10sdp">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

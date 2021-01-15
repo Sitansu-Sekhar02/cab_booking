@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.blucore.chalochale"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -93,6 +93,10 @@ dependencies {
     annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
     implementation 'android.arch.lifecycle:livedata:1.1.1'
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
+    //Razor pay
+    implementation 'com.razorpay:checkout:1.5.16'
+    implementation "com.razorpay:razorpay-java:1.3.8"
 
 
 }

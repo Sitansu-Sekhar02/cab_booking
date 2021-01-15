@@ -80,7 +80,6 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
 
         preferences=new Preferences(this);
 
-        NotificationTime();
 
 
         // Check if message contains a notification payload.
@@ -88,12 +87,12 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
         {
             Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
             sendNotification(notification, data);
+           // NotificationTime();
         }
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
             try {
-
 
                 // JSONObject jsonObject = new JSONObject(remoteMessage.getData());
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
@@ -154,8 +153,6 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
              cust_userId=data.getString("customer_user_id");
              user_contact_no=data.getString("user_contact_no");
             riding_price=data.getString("price");
-            //address_driver=data.getString("driver_address");
-
 
 
             // JSONObject payload = data.getJSONObject("payload");
@@ -172,7 +169,6 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
             Log.e(TAG, "customer_user_id: " + cust_userId);
             Log.e(TAG, "user_contact_no: " + user_contact_no);
             Log.e(TAG, "price: " + riding_price);
-           // Log.e(TAG, "driver_address: " + address_driver);
 
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
@@ -246,6 +242,7 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
                 .setContentInfo(notification.getTitle())
                 .setLargeIcon(icon)
                 .setColor(Color.RED)
+                .setTimeoutAfter(30000)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setLights(Color.RED, 1000, 300)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
@@ -285,11 +282,11 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
         notificationManager.notify(0, notificationBuilder.build());
         //removeNotification(id);
 
-     /*   Handler h = new Handler();
+        /*Handler h = new Handler();
         long delayInMilliseconds = 30000;
         h.postDelayed(new Runnable() {
             public void run() {
-                notificationManager.cancel(id);
+                notificationManager.cancel(0);
             }
         }, delayInMilliseconds);*/
     }
@@ -310,6 +307,7 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent)
                 .setContentInfo(title)
                 .setLargeIcon(icon)
+                .setTimeoutAfter(30000)
                 .setColor(Color.RED)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setLights(Color.RED, 1000, 300)
@@ -343,9 +341,7 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
                     "channel_id", "channel_name", NotificationManager.IMPORTANCE_HIGH
             );
             channel.setDescription("channel description");
-
             channel.setShowBadge(true);
-
             channel.canShowBadge();
             channel.enableLights(true);
             channel.setLightColor(Color.RED);
@@ -361,6 +357,9 @@ public class MyCabFirebaseService extends FirebaseMessagingService {
         note.flags = Notification.FLAG_INSISTENT;
         note.flags |= Notification.FLAG_ONGOING_EVENT;
         note.flags |= Notification.FLAG_AUTO_CANCEL;
+
+       // NotificationUtils.clearNotifications(getApplicationContext());
+
         notificationManager.notify(0, note);
 
        /* Handler h = new Handler();

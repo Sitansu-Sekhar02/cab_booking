@@ -52,7 +52,7 @@
                    android:textColor="#ffffff"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
-                   android:text="Display Track"/>
+                   android:text="@string/displaytrack"/>
             </LinearLayout>
 
 
@@ -75,7 +75,7 @@
                     android:textColor="#ffffff"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="End Trip"/>
+                    android:text="@string/endtrip"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -118,11 +118,11 @@
                         android:id="@+id/driver_name"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:textSize="@dimen/_18sdp"
+                        android:textSize="@dimen/_14sdp"
                         android:layout_marginTop="@dimen/_10sdp"
                         android:textColor="#ffffff"
                         android:textStyle="bold"
-                        android:text="Call User"/>
+                        android:text="@string/calldriver"/>
 
                 </LinearLayout>
             <TextView
@@ -130,12 +130,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:textSize="@dimen/_18sdp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="#ffffff"
                 android:textAllCaps="true"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:textStyle="bold"
-                android:text="OTP"/>
+                android:text="@string/otp"/>
 
         </LinearLayout>
 
@@ -164,11 +164,11 @@
                     android:id="@+id/track_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TRACK USER LOCATION"
+                    android:text="@string/trackuserloc"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:drawableLeft="@drawable/ic_location_red"
-                    android:textSize="@dimen/_18sdp"
+                    android:textSize="@dimen/_16sdp"
                     android:textColor="#000000"/>
             </LinearLayout>
 

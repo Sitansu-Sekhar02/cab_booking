@@ -193,11 +193,13 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         preferences=new Preferences(getActivity());
         cabListModel = new ArrayList<>();
 
+        ProductProgressBar();
+        dialog.show();
+
 
 
         if (Utils.isNetworkConnectedMainThred(getActivity())) {
-            ProductProgressBar();
-            dialog.show();
+
             RideDetails();
          /*   new Handler().postDelayed(new Runnable(){
                 @Override
@@ -207,7 +209,6 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             }, 0);*/
 
         } else {
-
             Toasty.error(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
         }
 
@@ -242,6 +243,8 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         } else {
             System.out.println("Unable");
         }
+
+
 
         return view;
     }
@@ -344,14 +347,14 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         StringRequest rqst = new StringRequest(Request.Method.POST, ride_details, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                dialog.cancel();
+
                 Log.e("ride_details",""+ response.length());
                 //replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
                 try {
                     JSONObject JSNobject = new JSONObject(response);
                     if (JSNobject.getString("success").equalsIgnoreCase("true")) {
                         Log.e("responsess",""+JSNobject);
-
+                        dialog.cancel();
                         JSONArray jsonArray = JSNobject.getJSONArray("get_driver_details");
                         for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -440,6 +443,8 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
                         google_pay.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Intent i = new Intent(getActivity(), RazorpayActivity.class);
+                                startActivity(i);
 
                             }
                         });
@@ -460,8 +465,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
 
                     }else {
 
-                        ProductProgressBar();
-                        dialog.show();
+
                         RideDetails();
 
                           /*  new Handler().postDelayed(new Runnable(){
@@ -655,11 +659,11 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(routes.startLocation, 13));
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_taxi_black))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_adjust_24))
                     .title(routes.startAddress)
                     .position(routes.startLocation)));
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_adjust_24))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_point))
                     .title(routes.endAddress)
                     .position(routes.endLocation)));
 

@@ -16,7 +16,7 @@
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status"
+            android:text="@string/status"
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:textColor="#ffffff"
@@ -24,7 +24,7 @@
             android:textOff="OFF"
             android:textOn="ON"
             android:background="@drawable/button_border"
-            android:layout_margin="10sp"
+            android:layout_margin="@dimen/_10sdp"
             android:id="@+id/workingSwitch"/>
     </LinearLayout>
 
@@ -45,34 +45,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="100sp"
-                android:layout_height="100sp"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
                 android:id="@+id/customerProfileImage"
                 android:src="@drawable/ic_baseline_person_pin_24"
-                android:padding="20sp"/>
+                android:padding="@dimen/_20sdp"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="40sp">
+                android:paddingLeft="@dimen/_40sdp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customerDestination"
-                    android:paddingBottom="10sp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:text="Destination:"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customerName"
-                    android:paddingBottom="10sp"
-                    android:paddingTop="20sp"/>
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_20sdp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/customerPhone"
-                    android:paddingBottom="10sp"
-                    android:paddingTop="20sp"/>
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_20sdp"/>
             </LinearLayout>
         </LinearLayout>
         <Button

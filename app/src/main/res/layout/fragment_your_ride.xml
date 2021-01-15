@@ -7,6 +7,7 @@
     <LinearLayout
         android:id="@+id/llcartItem"
         android:weightSum="10"
+        android:visibility="gone"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -22,5 +23,31 @@
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/empty"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/shop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginBottom="10sp"
+            android:src="@drawable/ic_baseline_calendar_today_24"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Looks like there aren't any\n ride in your history.\n PLease book a ride from Chalo Chale Cab!"
+            android:textColor="#848484"
+            android:textSize="15sp" />
+
     </LinearLayout>
 </LinearLayout>

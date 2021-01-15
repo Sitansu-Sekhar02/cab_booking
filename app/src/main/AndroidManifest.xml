@@ -44,6 +44,7 @@
         <activity android:name=".Driver.DriverRouteActivity"/>
         <activity android:name=".Activity.SignUpActivity" />
         <activity android:name=".Driver.PaymentDetails"/>
+        <activity android:name=".Fragments.RazorpayActivity"/>
         <activity android:name=".Driver.AcceptUserRideActivity"/>
 
         <meta-data
@@ -51,7 +52,9 @@
             android:value="@string/map_key" />
 
         <activity android:name=".Activity.MainActivity" />
-
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_QQugGpcm7Ryo6t" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

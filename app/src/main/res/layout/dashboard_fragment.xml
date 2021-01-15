@@ -96,7 +96,7 @@
                                android:gravity="left|center_vertical"
                                android:maxLines="1"
                                android:paddingLeft="@dimen/button_padding1"
-                               android:hint="Your Location..."
+                               android:hint="@string/yourlocation"
                                android:textAllCaps="false" />
 
                            <ImageView
@@ -134,7 +134,7 @@
                                android:gravity="left|center_vertical"
                                android:maxLines="1"
                                android:paddingLeft="@dimen/button_padding1"
-                               android:hint="Your destination..." />
+                               android:hint="@string/yourdestination" />
 
                            <ImageView
                                android:layout_width="@dimen/_24sdp"
@@ -179,7 +179,7 @@
                 android:layout_height="match_parent"
                 android:background="#000"
                 android:gravity="center"
-                android:text="Request Cab"
+                android:text="@string/requestcab"
                 android:textColor="#ffffff"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />

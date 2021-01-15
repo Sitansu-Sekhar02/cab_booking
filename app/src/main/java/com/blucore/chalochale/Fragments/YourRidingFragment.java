@@ -54,6 +54,8 @@ public class YourRidingFragment extends Fragment {
     LinearLayoutManager layoutManager;
     YourRideAdapter mAdapter;
     Preferences preferences;
+    LinearLayout empty;
+    LinearLayout llcartItem;
     Dialog dialog;
 
 
@@ -95,6 +97,8 @@ public class YourRidingFragment extends Fragment {
 
 
         recyclerView=v.findViewById(R.id.recyclerView);
+        empty=v.findViewById(R.id.empty);
+        llcartItem=v.findViewById(R.id.llcartItem);
 
         //set adapter
        /* layoutManager = new LinearLayoutManager(getActivity());
@@ -169,6 +173,13 @@ public class YourRidingFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+                if (rideModels.isEmpty()){
+                    llcartItem.setVisibility(View.GONE);
+                    empty.setVisibility(View.VISIBLE);
+                } else {
+                    llcartItem.setVisibility(View.VISIBLE);
+                    empty.setVisibility(View.GONE);
+                }
 
             }
 

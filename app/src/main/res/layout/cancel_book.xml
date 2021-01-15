@@ -30,7 +30,7 @@
                     android:id="@+id/textView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Are you sure?\nYou want to cancel the Ride"
+                    android:text="@string/surefor"
                     android:gravity="center"
                     android:textStyle="bold"
                     android:textSize="@dimen/_18sdp"
@@ -45,7 +45,7 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/_1sdp"
                 android:layout_below="@+id/rr"
                 android:background="@color/grey_300" />
 
@@ -55,7 +55,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@null"
                 android:gravity="center"
-                android:text="NO"
+                android:text="@string/no"
                 android:textStyle="bold"
                 android:textColor="#FB4005"
                 android:textSize="@dimen/_11sdp"
@@ -68,7 +68,7 @@
 
             <View
                 android:id="@+id/view4"
-                android:layout_width="1dp"
+                android:layout_width="@dimen/_1sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_below="@+id/view"
                 android:layout_centerHorizontal="true"
@@ -81,8 +81,8 @@
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:layout_below="@+id/view"
-                android:text="YES"
-                android:textColor="#F6BA04"
+                android:text="@string/yes"
+                android:textColor="#DFA801"
                 android:textStyle="bold"
                 android:textSize="@dimen/_11sdp"
                 android:layout_toLeftOf="@+id/view4"

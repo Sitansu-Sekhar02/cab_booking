@@ -53,7 +53,7 @@
                 android:drawableLeft="@drawable/ic_baseline_person_24"
                 android:drawablePadding="@dimen/_5sdp"
                 android:inputType="text"
-                android:hint="First name"
+                android:hint="@string/firstname"
                 android:padding="@dimen/_8sdp" />
 
             <EditText
@@ -65,7 +65,7 @@
                 android:drawableLeft="@drawable/ic_baseline_person_24"
                 android:drawablePadding="@dimen/_5sdp"
                 android:inputType="text"
-                android:hint="Last name"
+                android:hint="@string/lastname"
                 android:padding="@dimen/_8sdp" />
             <EditText
                 android:id="@+id/editTextEmail"
@@ -138,7 +138,7 @@
                 android:background="@drawable/shapesignup"
                 android:padding="@dimen/_15sdp"
                 android:shadowColor="@android:color/transparent"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:textStyle="bold"
                 android:textColor="#ffffff" />
             <Button

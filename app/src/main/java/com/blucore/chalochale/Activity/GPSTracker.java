@@ -406,7 +406,6 @@ public final class GPSTracker extends Service implements LocationListener {
                 e.printStackTrace();
             }
 
-
         }
 
 

@@ -214,9 +214,12 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             public void onClick(View view) {
 
                 if (Utils.isNetworkConnectedMainThred(getActivity())) {
+
                     SearchingCabBar();
                     dialog.show();
                     ConfirmRide();
+                    replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
+
                     //getRideDetails();
                 } else {
 
@@ -305,7 +308,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                             replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
 
                         }*/
-                        replaceFragmentWithAnimation(new BookCabFragment(),source,destination);
 
                         // setAdapter();
 
@@ -334,7 +336,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                 //parameters.put("driver_id",driver_id);
                 parameters.put("vehicle_type_id",vehiclyType_id);
                 Log.e("vehicle_type_id",""+parameters);
-                //parameters.put("paymentMethod, ","COD" );
                 return parameters;
             }
         };
@@ -572,7 +573,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
 
-        ArrayList<LatLng> locations = new ArrayList();
+       /* ArrayList<LatLng> locations = new ArrayList();
         locations.add(new LatLng(118.580669255285365, 73.74254638744726));
         locations.add(new LatLng(18.59059450137149, 73.72555191223913));
         locations.add(new LatLng(18.59970940309996, 73.7673305611182));
@@ -586,7 +587,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                     .title("available taxi"));
 
 
-        }
+        }*/
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 13));
 
@@ -599,7 +600,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
 
 
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                    .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_point))
                     .title(route.endAddress)
                     .position(route.endLocation)));
             PolylineOptions polylineOptions = new PolylineOptions().
@@ -738,17 +739,32 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
             holder.cabList.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryLight));
 
             if (selectedItem == position) {
+                if (selectedItem==0){
+                    id = mModel.get(position).getVehicle_type_id();
+                    vehiclyType_id=id;
+                    Log.e("iddd", "" + id);
+
+                }
 
                 holder.cabList.setCardBackgroundColor(context.getResources().getColor(R.color.colorPrimaryDarkR));
             }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                   /* if (position==0){
+                        id = mModel.get(position).getVehicle_type_id();
+                        Log.e("iddd", "" + id);
+
+                    }*/
 
                     id = mModel.get(position).getVehicle_type_id();
+                    vehiclyType_id=id;
                     Log.e("id", "" + id);
 
-                    vehiclyType_id=id;
+                    int previousItem = selectedItem;
+                    selectedItem = position;
+                    notifyItemChanged(previousItem);
+                    notifyItemChanged(position);
 
                    /* driver_id=mModel.get(position).getDriver_id();
                     Log.e("driver_id", "" + driver_id);
@@ -777,10 +793,7 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                     total_bookPrice=cab_bookPrices;
                     driver_number=driver_no;*/
 
-                    int previousItem = selectedItem;
-                    selectedItem = position;
-                    notifyItemChanged(previousItem);
-                    notifyItemChanged(position);
+
                 }
             });
 
@@ -830,11 +843,9 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                             CabBookingModel cabList = new CabBookingModel();
                             String cab_id = Object.getString("id");
                             String vehicle_type_id = Object.getString("vehicle_type_id");
-                           // String total_count = Object.getString("total");
+                            Log.e("id_driv",""+vehicle_type_id);
 
                             String driver_id=Object.getString("driver_id");
-                            Log.e("id_driv",""+vehicle_type_id);
-                            //Log.e("driver",""+driver_id);
                             String cab_name = Object.getString("vehicle_type");
                             String price = Object.getString("price");
                             String vehicle_company=Object.getString("vehicle_compony");
@@ -859,7 +870,6 @@ public class ShowCabFragment extends Fragment implements OnMapReadyCallback, Dir
                             cabList.setDriver_name(driver_name);
                             cabList.setCab_company(vehicle_company);
                             cabList.setVehicle_type_id(vehicle_type_id);
-                            //cabList.setTotal_count(total_count);
 
                             cabList.setDriver_number(driver_number);
                             cabList.setOtp(otp);

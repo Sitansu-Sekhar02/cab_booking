@@ -1,7 +1,11 @@
 package com.blucore.chalochale.Driver;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -9,6 +13,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +51,10 @@ import es.dmoral.toasty.Toasty;
 public class AcceptUserRideActivity extends AppCompatActivity {
 
     public static final String driver_status = "https://admin.chalochalecab.com/Webservices/confirm_user.php";
+    private static final int RED = 0xE63A04;
+    private static final int BLUE = 0xE4AC04;
+    private static final int WHITE = 0xFFFFFF;
+
 
     TextView otp;
     Preferences preferences;
@@ -58,6 +68,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
     TextView from_address;
     TextView to_address;
     TextView cust_mobile;
+    TextView tv_request;
     Button accept_ride;
     Button reject_ride;
     @Override
@@ -71,6 +82,22 @@ public class AcceptUserRideActivity extends AppCompatActivity {
         accept_ride=findViewById(R.id.accept_ride);
         reject_ride=findViewById(R.id.cancel_ride);
         cust_mobile=findViewById(R.id.user_number);
+        tv_request=findViewById(R.id.tv_request);
+
+        ValueAnimator colorAnim = ObjectAnimator.ofInt(tv_request, "textColor", RED, BLUE,WHITE);
+        colorAnim.setDuration(1000);
+        colorAnim.setEvaluator(new ArgbEvaluator());
+        colorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        colorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        colorAnim.start();
+
+       /* Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(50); //You can manage the blinking time with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        tv_request.startAnimation(anim);*/
+
         preferences=new Preferences(this);
         cabListModel = new ArrayList<>();
 

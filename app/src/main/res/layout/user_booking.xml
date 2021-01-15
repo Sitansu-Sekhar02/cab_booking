@@ -44,7 +44,7 @@
                     android:textColor="#ffffff"
                     android:textAllCaps="false"
                     android:text="Call Driver"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
 
@@ -72,7 +72,7 @@
                 android:textColor="#ffffff"
                 android:textAllCaps="false"
                 android:text="Cancel Ride"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_10sdp" />
         </LinearLayout>
 
             <View
@@ -98,7 +98,7 @@
                 android:textColor="#ffffff"
                 android:textAllCaps="false"
                 android:text="Share"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_10sdp" />
         </LinearLayout>
             <View
                 android:layout_width="@dimen/_1sdp"
@@ -125,7 +125,7 @@
                     android:textColor="#ffffff"
                     android:textAllCaps="false"
                     android:text="Track Location"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
 
@@ -258,33 +258,15 @@
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginLeft="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="end"
             android:layout_marginRight="@dimen/_8sdp"
             android:layout_height="match_parent">
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:src="@drawable/google"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/_14sdp"
-                android:gravity="center"
-                android:textColor="#676666"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:textStyle="bold"
-                android:text="Pay"/>
             <Button
                 android:id="@+id/google_pay"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="@dimen/_160sdp"
                 android:background="@drawable/button_border"
                 android:text="Pay"
-                android:paddingLeft="@dimen/_7sdp"
                 android:textStyle="bold"
-                android:drawableLeft="@drawable/google_sm"
                 android:textColor="#ffffff"
                 android:layout_height="match_parent"/>
 

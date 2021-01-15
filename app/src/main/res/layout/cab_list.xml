@@ -21,7 +21,7 @@
         android:id="@+id/card_view"
         xmlns:card_view="https://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_height="@dimen/_80sdp"
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_4sdp"
@@ -38,43 +38,42 @@
 
             <ImageView
                 android:id="@+id/Cabimage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1" />
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/tvCabName"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/auto"
+                    android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/tvTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:gravity="center"
                     android:text="Estimated time"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
                 <TextView
                     android:id="@+id/tvCabprice"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="₹ 30.00"
                     android:textStyle="bold"
-                    android:layout_marginRight="@dimen/_10sdp"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             </LinearLayout>

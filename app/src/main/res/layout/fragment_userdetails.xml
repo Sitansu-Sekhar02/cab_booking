@@ -34,7 +34,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.3dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="@dimen/_10sdp"
                     android:background="#afafaf" />
 
             </LinearLayout>
@@ -108,7 +108,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.3dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/_10sdp"
                         android:background="#afafaf" />
                     <TextView
                         android:layout_width="match_parent"
@@ -130,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.3dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/_10sdp"
                         android:background="#afafaf" />
                     <TextView
                         android:layout_width="match_parent"
@@ -152,7 +152,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.3dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/_10sdp"
                         android:background="#afafaf" />
 
                 </LinearLayout>
