@@ -27,8 +27,8 @@ public class BackgroundLocationService extends Service {
     private LocationManager mLocationManager;
     private NotificationManager notificationManager;
     private LocationRepository locationRepository;
-    private final int LOCATION_INTERVAL = 500;
-    private final int LOCATION_DISTANCE = 1;
+    private final int LOCATION_INTERVAL = 120000;
+    private final int LOCATION_DISTANCE = 10;
     Double latitute,longitute;
 
 

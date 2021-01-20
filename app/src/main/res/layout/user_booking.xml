@@ -97,7 +97,7 @@
                 android:gravity="center"
                 android:textColor="#ffffff"
                 android:textAllCaps="false"
-                android:text="Share"
+                android:text="Share ride"
                 android:textSize="@dimen/_10sdp" />
         </LinearLayout>
             <View

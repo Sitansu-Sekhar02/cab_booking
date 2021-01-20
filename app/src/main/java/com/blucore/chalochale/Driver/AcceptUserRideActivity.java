@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -15,10 +16,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -48,18 +53,25 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
-public class AcceptUserRideActivity extends AppCompatActivity {
+public class AcceptUserRideActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String driver_status = "https://admin.chalochalecab.com/Webservices/confirm_user.php";
-    private static final int RED = 0xE63A04;
-    private static final int BLUE = 0xE4AC04;
-    private static final int WHITE = 0xFFFFFF;
+    private static final int RED = 0xffFF8080;
+    private static final int BLUE = 0xff8080FF;
+    private static final int WHITE = 0xFFff8080;
+
+    String[] reason = {"On personal trip", "Petrol issue", "Out Of money", "Other reason"};
+
+
+    // private static final int WHITE = 0xFFFFFF;
 
 
     TextView otp;
     Preferences preferences;
     public static int backPressed = 0;
     String status;
+
+    String selected;
 
     private List<CabBookingModel> cabListModel;
 
@@ -85,7 +97,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
         tv_request=findViewById(R.id.tv_request);
 
         ValueAnimator colorAnim = ObjectAnimator.ofInt(tv_request, "textColor", RED, BLUE,WHITE);
-        colorAnim.setDuration(1000);
+        colorAnim.setDuration(500);
         colorAnim.setEvaluator(new ArgbEvaluator());
         colorAnim.setRepeatCount(ValueAnimator.INFINITE);
         colorAnim.setRepeatMode(ValueAnimator.REVERSE);
@@ -124,9 +136,9 @@ public class AcceptUserRideActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (Utils.isNetworkConnectedMainThred(AcceptUserRideActivity.this)) {
-                    ProductProgressBar();
-                    dialog.show();
-                    RejectRide();
+
+                    RejectDialog();
+
                 } else {
                     Toasty.error(AcceptUserRideActivity.this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
                 }
@@ -135,6 +147,55 @@ public class AcceptUserRideActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void RejectDialog() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.reject_ride);
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_BLUR_BEHIND;
+        window.setAttributes(wlp);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.show();
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+
+        //findId
+        TextView tvYes = (TextView) dialog.findViewById(R.id.tvReject);
+        TextView tvCancel = (TextView) dialog.findViewById(R.id.tvNo);
+        Spinner reason_spin = dialog.findViewById(R.id.spinner_reject);
+        reason_spin.setOnItemSelectedListener(this);
+        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item,reason);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //final String spin =reason_spin.getSelectedItem().toString();
+        //Setting the ArrayAdapter data on the Spinner
+        reason_spin.setAdapter(adapter);
+
+
+        dialog.show();
+
+        //set listener
+        tvYes.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onClick(View v) {
+                ProductProgressBar();
+                dialog.show();
+                RejectRide(selected);
+            }
+        });
+
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
     private void ProductProgressBar() {
         dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -148,7 +209,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
         dialog.setCancelable(false);
     }
 
-    private void RejectRide() {
+    private void RejectRide(final String selected) {
         StringRequest request = new StringRequest(Request.Method.POST, driver_status, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -157,19 +218,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
 
                 Intent intent=new Intent(AcceptUserRideActivity.this,DriverMainActivity.class);
                 startActivity(intent);
-               /* try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
-                    {
-                        //replaceFragmentWithAnimation(new Dri());
-                        Intent intent=new Intent(AcceptUserRideActivity.this,DriverMainActivity.class);
-                        startActivity(intent);
 
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
 
             }
         }, new Response.ErrorListener() {
@@ -185,6 +234,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
                 parameters.put("user_id",MyCabFirebaseService.cust_userId);
                 parameters.put("driver_id", MyCabFirebaseService.driver_id);
                 parameters.put("acceptRejectStatus","0");
+                parameters.put("reject_reason",selected);
                 Log.e("PARAM",""+parameters);
                 return parameters;
             }
@@ -268,6 +318,7 @@ public class AcceptUserRideActivity extends AppCompatActivity {
                 parameters.put("user_id",MyCabFirebaseService.cust_userId);
                 parameters.put("driver_id", MyCabFirebaseService.driver_id);
                 parameters.put("acceptRejectStatus", "1");
+                parameters.put("reject_reason","");
                 Log.e("par",""+parameters);
 
                 return parameters;
@@ -307,5 +358,14 @@ public class AcceptUserRideActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        selected = parent.getItemAtPosition(position).toString();
 
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

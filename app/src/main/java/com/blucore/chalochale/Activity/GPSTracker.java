@@ -204,46 +204,7 @@ public final class GPSTracker extends Service implements LocationListener {
         return location;
     }
 
-   /* private void getDriverLatlng(final double latitude, final double longitude) {
-        StringRequest request = new StringRequest(Request.Method.POST, latlng_driver, new Response.Listener<String>() {
 
-            @Override
-            public void onResponse(String response) {
-                //dialog.cancel();
-                Log.e("driver latlng", response);
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
-                    {
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //dialog.cancel();
-                Log.e("error_response", "" + error);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("driverMobileNo",preferences.get("contact_no"));
-                parameters.put("latitude", String.valueOf(latitude));
-                parameters.put("longitude", String.valueOf(longitude));
-                Log.e("latlng",""+parameters);
-                return parameters;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
-        requestQueue.add(request);
-    }
-*/
     /**
      * Stop using GPS listener Calling this function will stop using GPS in your
      * app
@@ -334,6 +295,15 @@ public final class GPSTracker extends Service implements LocationListener {
 
         Log.e("testing", "" + latLng);
 
+        if (preferences.get("roll").equalsIgnoreCase("driver")){
+            getDriverLatlng(latLng.latitude,latLng.longitude);
+
+        }else {
+
+        }
+
+
+
 //    LocationRepository  locationRepository = new LocationRepository(mContext);
 //        MyLocation loc = new MyLocation();
 //        loc.setLatitude(latLng.latitude);
@@ -361,14 +331,9 @@ public final class GPSTracker extends Service implements LocationListener {
             //loc.setTime(Long.parseLong(mLastUpdateTime));
 
             locationRepository.insertLocation(loc);
-            Log.e("12456666", "" + latLng.longitude);
+            Log.e("123", "" + latLng.latitude);
+            Log.e("456", "" + latLng.longitude);
 
-            if (preferences.get("roll").equalsIgnoreCase("driver")){
-                getDriverLatlng(latitude,longitude);
-
-            }else {
-
-            }
 
             //getDriverLatlng(latitude,longitude);
 

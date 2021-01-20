@@ -30,7 +30,7 @@
                     android:id="@+id/textView22"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/surefor"
+                    android:text="@string/rejectride"
                     android:textStyle="bold"
                     android:textSize="@dimen/_12sdp"
                     android:textColor="#FD480F"
@@ -42,7 +42,7 @@
                     android:layout_below="@+id/textView22"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/spinner_reason"
+                    android:id="@+id/spinner_reject"
                     android:spinnerMode="dropdown"
                     android:layout_marginHorizontal="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
@@ -83,13 +83,13 @@
                 android:background="@color/grey_300" />
 
             <TextView
-                android:id="@+id/tvYes"
+                android:id="@+id/tvReject"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:layout_below="@+id/view"
-                android:text="@string/yes"
+                android:text="@string/reject1"
                 android:textColor="#F63E03"
                 android:textStyle="bold"
                 android:textSize="@dimen/_11sdp"

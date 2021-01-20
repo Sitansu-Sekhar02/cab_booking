@@ -28,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -122,10 +123,9 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
 
     Button show_route,end_trip;
     ImageView back;
-    TextView callUser;
+    LinearLayout callUser;
     TextView otp;
     TextView track_user_location;
-
 
 
     private List<Marker> originMarkers = new ArrayList<>();
@@ -290,17 +290,9 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
                 dialog.cancel();
                 Log.e("end_ride", response);
 
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    if(jsonObject.getString("success").equalsIgnoreCase("1"))
-                    {
-                        Intent intent=new Intent(DriverRouteActivity.this,PaymentDetails.class);
-                        startActivity(intent);
-                    }
+                Intent intent=new Intent(DriverRouteActivity.this,PaymentDetails.class);
+                startActivity(intent);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
             }
         }, new Response.ErrorListener() {

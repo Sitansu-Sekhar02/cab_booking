@@ -29,14 +29,14 @@
     <string name="lastname">Last name</string>
     <string name="submit">Submit</string>
     <string name="alert">Confirmation Alert</string>
-    <string name="yes">YES</string>
+    <string name="yes">CANCEL</string>
     <string name="no">NO</string>
-    <string name="surefor">Are you sure?\nYou want to cancel the Ride</string>
+    <string name="surefor">Please select a reason.Why you want to cancel the ride ?</string>
     <string name="yourlocation">Your Location...</string>
     <string name="yourdestination">Your destination...</string>
     <string name="requestcab">Request Cab</string>
     <string name="status">Status</string>
-    <string name="trackuserloc">TRACK USER LOCATION</string>
+    <string name="trackuserloc">Track User Location</string>
     <string name="calldriver">Call User</string>
     <string name="otp">OTP</string>
     <string name="displaytrack">Display Track</string>
@@ -51,4 +51,6 @@
     <string name="aboutus">About Us</string>
     <string name="shareapp">Share App</string>
     <string name="logout">Log Out</string>
+    <string name="rejectride">Please select a reason.Why you want to reject the ride ?</string>
+    <string name="reject1">Reject</string>
 </resources>

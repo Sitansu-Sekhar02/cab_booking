@@ -26,10 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,7 +102,7 @@ import es.dmoral.toasty.Toasty;
 import static com.blucore.chalochale.Activity.MainActivity.tvHeaderText;
 
 
-public class BookCabFragment extends Fragment implements OnMapReadyCallback,DirectionFinderListener {
+public class BookCabFragment extends Fragment implements OnMapReadyCallback,DirectionFinderListener, AdapterView.OnItemSelectedListener {
     Location currentLocation;
     public static final String ride_details = "https://admin.chalochalecab.com/Webservices/select_driver_details.php";
     public static final String cancel_booking = "https://admin.chalochalecab.com/Webservices/user_cancel_ride.php";
@@ -126,6 +129,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
     TextView vehicle_name;
     TextView vehicle_number;
 
+
     RelativeLayout driver_details;
     RelativeLayout TaxiHorizontal;
     LinearLayout otp_lnr;
@@ -150,9 +154,10 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
 
     String sources;
     String destinations;
-
+    String selected;
 
     Button google_pay;
+    String[] reason = { "Find another source to travel", "Plan cancelled", "I got the  cab/auto", "Other reason"};
 
 
     Double lat,lng;
@@ -160,7 +165,6 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
 
 
     View view;
-
 
 
     @Nullable
@@ -181,6 +185,8 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         total_bookPrice=view.findViewById(R.id.total_price);
         user_otp=view.findViewById(R.id.otp);
         track_Mylocation=view.findViewById(R.id.track_Mylocation);
+
+
 
         google_pay=view.findViewById(R.id.google_pay);
 
@@ -244,8 +250,6 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             System.out.println("Unable");
         }
 
-
-
         return view;
     }
 
@@ -267,6 +271,13 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         //findId
         TextView tvYes = (TextView) dialog.findViewById(R.id.tvYes);
         TextView tvCancel = (TextView) dialog.findViewById(R.id.tvNo);
+        Spinner reason_spin = dialog.findViewById(R.id.spinner_reason);
+        reason_spin.setOnItemSelectedListener(this);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item,reason);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //final String spin =reason_spin.getSelectedItem().toString();
+        //Setting the ArrayAdapter data on the Spinner
+        reason_spin.setAdapter(adapter);
 
 
         dialog.show();
@@ -277,7 +288,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
             @Override
             public void onClick(View v) {
                 LoaderProgress();
-                CancelRide();
+                CancelRide(selected);
                 dialog.show();
             }
         });
@@ -303,7 +314,7 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         dialog.setCancelable(false);
     }
 
-    private void CancelRide() {
+    private void CancelRide(final String selected) {
         StringRequest request = new StringRequest(Request.Method.POST, cancel_booking, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -335,12 +346,12 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
                 Map<String, String> parameters = new HashMap<String, String>();
                 parameters.put("user_id", preferences.get("user_id"));
                 parameters.put("driver_mobile_no",driver_number2);
+                parameters.put("cancel_reason",selected);
                 return parameters;
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(request);
-
     }
 
     private void RideDetails() {
@@ -703,5 +714,18 @@ public class BookCabFragment extends Fragment implements OnMapReadyCallback,Dire
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //((TextView) parent.getChildAt(0)).setTextColor(Color.RED); /* if you want your item to be white */
+       // Toast.makeText(getActivity(),reason[position] , Toast.LENGTH_SHORT).show();
+         selected = parent.getItemAtPosition(position).toString();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
