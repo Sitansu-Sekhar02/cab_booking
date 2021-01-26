@@ -49,6 +49,8 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setItemIconTintList(null);
+
         tvHeaderText = findViewById(R.id.tvHeaderText);
 
         tvHeaderText.setText("Chalo Chale Cab");

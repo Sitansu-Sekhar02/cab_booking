@@ -96,7 +96,7 @@
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:layout_below="@+id/view"
-                android:text="@string/yes"
+                android:text="@string/ok"
                 android:textColor="#08A50E"
                 android:textSize="@dimen/_11sdp"
                 android:layout_toLeftOf="@+id/view4"

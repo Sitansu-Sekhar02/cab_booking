@@ -62,6 +62,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -91,7 +92,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
-public class DashboardFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+public class    DashboardFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener, DirectionFinderListener {
     public static final String rideNow_api = "https://admin.chalochalecab.com/Webservices/ride_details.php";
@@ -114,6 +115,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     Dialog dialog;
     String sSource, sDestination;
     Preferences preferences;
+    float zoomLevel = 16.0f; //This goes up to 21
 
 
     View view;
@@ -332,7 +334,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-
         if (requestCode == AUTOCOMPLETE_REQUEST_CODEE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -431,7 +432,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             mMap.setMyLocationEnabled(true);
             //dialog.cancel();
         }
-       /* LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -447,22 +448,22 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null)
         {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 13));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 17));
 
-         *//*   CameraPosition cameraPosition = new CameraPosition.Builder()
+            CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(latitute, longitute))      // Sets the center of the map to location user
-                    .zoom(15)                   // Sets the zoom
+                    .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)                   // Sets the tilt of the camera to 30 degrees
+                    .tilt(40)
+                    // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
 
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*//*
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
             mMap.setMyLocationEnabled(true);
         }else {
             //buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-*/
 
 
     }
@@ -604,7 +605,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
         }
-//Showing Current Location Marker on Map
+        //Showing Current Location Marker on Map
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
@@ -639,12 +640,28 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
             }
         }
 
-
-        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_baseline_golf_course_24)).title("Your Location");
+        markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_pin)).title("Your Location");
         //dialog.cancel();
         mCurrLocationMarker = mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 16));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(latitute, longitute))      // Sets the center of the map to location user
+                    .zoom(16)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(40)// Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            mMap.setMyLocationEnabled(true);
+        }else {
+            //buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,
                     this);

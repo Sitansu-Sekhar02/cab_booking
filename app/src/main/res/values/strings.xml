@@ -53,4 +53,5 @@
     <string name="logout">Log Out</string>
     <string name="rejectride">Please select a reason.Why you want to reject the ride ?</string>
     <string name="reject1">Reject</string>
+    <string name="ok">YES</string>
 </resources>
