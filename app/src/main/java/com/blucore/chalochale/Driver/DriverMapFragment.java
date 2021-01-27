@@ -89,6 +89,7 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
     private final int PERMISSION_REQUEST_CODE = 200;
     public boolean mTracking = false;
 
+    float zoomLevel = 16.0f; //This goes up to 21
 
     private GoogleMap mMap;
     GoogleApiClient mGoogleApiClient;
@@ -358,12 +359,34 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
             }
         }
 
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Your Location");
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.getCameraPosition();
 
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        // mMap.getCameraPosition();
+
+        if (location != null)
+        {
+
+            markerOptions.icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_pin)).title("Your Location");
+            mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(),location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(30)                  // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+            mMap.setMyLocationEnabled(true);
+        }else {
+            //buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,
                     this);
@@ -435,7 +458,7 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-       /* LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -448,23 +471,26 @@ public class DriverMapFragment extends Fragment implements OnMapReadyCallback, G
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null)
         {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 17));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16));
             //buildGoogleApiClient();
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
             mMap.setMyLocationEnabled(true);
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(80)                   // Sets the tilt of the camera to 30 degrees
+                    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }else{
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
-        }*/
+        }
     }
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())

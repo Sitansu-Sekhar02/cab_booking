@@ -448,13 +448,13 @@ public class    DashboardFragment extends Fragment implements OnMapReadyCallback
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
         if (location != null)
         {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 17));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 16));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(latitute, longitute))      // Sets the center of the map to location user
+                    .target(new LatLng(location.getLatitude(),location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)
+                    .tilt(30)
                     // Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
 
@@ -650,10 +650,10 @@ public class    DashboardFragment extends Fragment implements OnMapReadyCallback
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 16));
 
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(latitute, longitute))      // Sets the center of the map to location user
-                    .zoom(16)                   // Sets the zoom
+                    .target(new LatLng(location.getLatitude(),location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
                     .bearing(90)                // Sets the orientation of the camera to east
-                    .tilt(40)// Sets the tilt of the camera to 30 degrees
+                    .tilt(30)// Sets the tilt of the camera to 30 degrees
                     .build();                   // Creates a CameraPosition from the builder
 
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));

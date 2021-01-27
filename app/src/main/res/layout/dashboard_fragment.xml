@@ -27,7 +27,7 @@
             android:layout_height="0dp"
            android:layout_marginLeft="@dimen/_12sdp"
            android:layout_marginRight="@dimen/_12sdp"
-           android:layout_marginTop="@dimen/_35sdp"
+           android:layout_marginTop="@dimen/_30sdp"
             android:layout_weight="1.5"
             android:paddingBottom="@dimen/_5sdp">
            <RelativeLayout

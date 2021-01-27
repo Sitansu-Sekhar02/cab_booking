@@ -69,6 +69,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -210,16 +211,6 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
         Log.e("from",""+from_address);
         String to_address = getIntent().getStringExtra("to_ads");
         Log.e("to",""+to_address);
-
-
-        /*try {
-            new DirectionFinder(this, from_address, to_address).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        getLocationFromAddress(to_address);
-*/
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -382,6 +373,40 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
                 mMap.setMyLocationEnabled(true);
             }
         } else {
+            buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
+
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+        if (location != null)
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 16));
+            //buildGoogleApiClient();
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
+            mMap.setMyLocationEnabled(true);
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        }else{
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
@@ -595,12 +620,31 @@ public class DriverRouteActivity extends AppCompatActivity implements OnMapReady
             }
         }
 
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).title("Your Location");
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.getCameraPosition();
+        if (location != null)
+        {
 
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+            markerOptions.icon(bitmapDescriptorFromVector(this, R.drawable.ic_pin)).title("Your Location");
+            mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitute, longitute), 15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude(),location.getLongitude()))      // Sets the center of the map to location user
+                    .zoom(17)                   // Sets the zoom
+                    .bearing(90)                // Sets the orientation of the camera to east
+                    .tilt(30)                  // Sets the tilt of the camera to 30 degrees
+                    .build();                   // Creates a CameraPosition from the builder
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+
+            mMap.setMyLocationEnabled(true);
+        }else {
+            //buildGoogleApiClient();
+            mMap.setMyLocationEnabled(true);
+        }
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient,
                     this);

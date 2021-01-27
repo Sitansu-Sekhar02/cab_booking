@@ -84,7 +84,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/TaxiHorizontal"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_above="@+id/driver_details"
         android:layout_alignParentBottom="false"
         android:background="#C4959494"
@@ -128,8 +127,12 @@
 
         </LinearLayout>
 
-
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_below="@+id/TaxiHorizontal"
+        android:layout_height="@dimen/_1sdp"
+        android:background="#C3C1C1"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:id="@+id/track_userLocation"
