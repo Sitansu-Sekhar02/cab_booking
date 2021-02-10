@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_dark"
-    tools:context="com.blucore.chalochale.Fragments.RazorpayActivity">
+    tools:context="com.blucore.chalochalecab.Fragments.RazorpayActivity">
 
     <TextView
         android:id="@+id/textView"

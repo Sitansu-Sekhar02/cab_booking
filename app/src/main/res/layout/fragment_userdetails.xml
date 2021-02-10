@@ -24,10 +24,10 @@
                 android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_marginTop="@dimen/_30sdp"
-                    android:layout_width="@dimen/_60sdp"
+                    android:layout_width="@dimen/_80sdp"
                     android:layout_gravity="center"
                     android:src="@drawable/boy"
-                    android:layout_height="@dimen/_60sdp" />
+                    android:layout_height="@dimen/_80sdp" />
                 <View
                     android:id="@+id/view"
                     android:layout_marginTop="@dimen/_8sdp"
@@ -40,6 +40,7 @@
             </LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_height="@dimen/_30sdp">
 
                     <LinearLayout
@@ -67,6 +68,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:background="@drawable/change_border"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
@@ -76,7 +78,7 @@
                         android:textStyle="bold"
                         android:text="Change Profile Details"
                         android:id="@+id/tvChange"
-                        android:textColor="@color/red_900"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/_14sdp" />
 
                 </RelativeLayout>
@@ -148,12 +150,6 @@
                         android:textColor="#000"
                         android:layout_margin="@dimen/_5sdp"
                         android:layout_height="wrap_content"/>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.3dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:background="#afafaf" />
 
                 </LinearLayout>
             </LinearLayout>

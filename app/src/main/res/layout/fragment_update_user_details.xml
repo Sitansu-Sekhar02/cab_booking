@@ -99,7 +99,7 @@
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/button_round"
+                android:background="@drawable/change_border"
 
                 android:text="Save Details"
                 android:textAlignment="center"

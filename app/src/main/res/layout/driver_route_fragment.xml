@@ -55,7 +55,6 @@
                    android:text="@string/displaytrack"/>
             </LinearLayout>
 
-
             <View
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:layout_width="@dimen/_1sdp"

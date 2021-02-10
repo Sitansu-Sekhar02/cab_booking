@@ -50,30 +50,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:text="@string/auto"
                     android:gravity="center"
                     android:textAppearance="?android:attr/textAppearanceLarge"/>
 
                 <TextView
-                    android:visibility="gone"
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:gravity="center"
-                    android:text="Estimated time"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
-                <TextView
                     android:id="@+id/tvCabprice"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_width="match_parent"
                     android:gravity="center"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:text="₹ 30.00"
                     android:textStyle="bold"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:text="Estimated time"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             </LinearLayout>
