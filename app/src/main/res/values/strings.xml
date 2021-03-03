@@ -39,7 +39,7 @@
     <string name="trackuserloc">Track User Location</string>
     <string name="calldriver">Call User</string>
     <string name="otp">OTP</string>
-    <string name="displaytrack">Display Track</string>
+    <string name="displaytrack">Start Ride</string>
     <string name="endtrip">End Trip</string>
     <string name="requestfornewride">Request for New Ride</string>
     <string name="from">From :</string>

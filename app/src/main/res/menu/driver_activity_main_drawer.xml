@@ -14,7 +14,13 @@
             android:icon="@drawable/ic_share"
             android:title="@string/shareapp" />
 
-        <item
+    <item
+        android:id="@+id/nav_update"
+        android:icon="@drawable/ic_updated"
+        android:title="Check for Update" />
+
+
+    <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_clicker"
             android:title="@string/logout" />

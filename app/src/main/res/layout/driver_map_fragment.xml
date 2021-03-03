@@ -20,7 +20,6 @@
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
             android:textColor="#ffffff"
-            android:checked="true"
             android:textOff="OFF"
             android:textOn="ON"
             android:background="@drawable/button_border"

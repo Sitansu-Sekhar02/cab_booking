@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.blucore.chalochalecab">
+    package="com.blucore.cabchalochale">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,12 +9,16 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <!-- <uses-permission android:name="android.permission.RECEIVE_SMS"/>-->
+<!--
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <!--
     <uses-permission android:name="android.permission.READ_SMS"/>
 -->
+<!--
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS"/>
+-->
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
@@ -27,38 +31,40 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="com.blucore.chalochalecab.Driver.BroadcastReceiver"/>
+        <receiver android:name="com.blucore.cabchalochale.Driver.BroadcastReceiver"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="com.blucore.chalochalecab.Activity.SplashActivity">
+        <activity android:name="com.blucore.cabchalochale.Activity.SplashActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.blucore.chalochalecab.Activity.LoginActivity"
+        <activity android:name="com.blucore.cabchalochale.Activity.LoginActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Driver.DriverMainActivity"
+        <activity android:name="com.blucore.cabchalochale.Driver.DriverMainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Driver.DriverRouteActivity"
+        <activity android:name="com.blucore.cabchalochale.Driver.DriverRouteActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Activity.SignUpActivity"
+        <activity android:name="com.blucore.cabchalochale.Activity.SignUpActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Driver.PaymentDetails"
+        <activity android:name="com.blucore.cabchalochale.Driver.PaymentDetails"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Fragments.RazorpayActivity"
+        <activity android:name="com.blucore.cabchalochale.Fragments.RazorpayActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
-        <activity android:name="com.blucore.chalochalecab.Driver.AcceptUserRideActivity"
+        <activity android:name="com.blucore.cabchalochale.Driver.AcceptUserRideActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
 
@@ -66,7 +72,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
 
-        <activity android:name="com.blucore.chalochalecab.Activity.MainActivity"
+        <activity android:name="com.blucore.cabchalochale.Activity.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"/>
         <meta-data
@@ -75,16 +81,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-        <receiver android:name="com.blucore.chalochalecab.BroadCastReceiver.SmsReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.blucore.chalochalecab.Driver.BackgroundLocationService"></service>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
 
-        <service android:name="com.blucore.chalochalecab.FirebaseClasses.MyCabFirebaseService"
+        <service android:name="com.blucore.cabchalochale.Driver.BackgroundLocationService"></service>
+
+
+        <service android:name="com.blucore.cabchalochale.FirebaseClasses.MyCabFirebaseService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

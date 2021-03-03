@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:558903496016:android:8215b524af465b522b7055",
         "android_client_info": {
-          "package_name": "com.blucore.cabchalochale"
+          "package_name": "com.blucore.chalochale"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "558903496016-u83uoaschr3s1ott746n6bl8e88nellk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blucore.cabchalochale",
+            "package_name": "com.blucore.chalochale",
             "certificate_hash": "e7ae398800ceb4a073b8ac9fe314d6cdff0d9d03"
           }
         },
