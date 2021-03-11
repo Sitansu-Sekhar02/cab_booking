@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,7 +119,10 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
              replaceFragmentWithAnimation( new SupportFragmentDriver());
 
          }
-         else if (id == R.id.nav_update) {
+         else if (id == R.id.nav_rides) {
+             replaceFragmentWithAnimation( new DriverRidingFragment());
+
+         } else if (id == R.id.nav_update) {
              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.blucore.chalochalecab"));
              startActivity(intent);
          }
@@ -192,6 +196,20 @@ public class DriverMainActivity extends AppCompatActivity implements NavigationV
         switch (v.getId()) {
             case R.id.iv_menu:
                 drawer.openDrawer(Gravity.LEFT);
+                v.setFocusableInTouchMode(true);
+                v.requestFocus();
+                v.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                drawer.closeDrawer(Gravity.LEFT);
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
                 break;
         }
 

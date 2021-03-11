@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,16 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.blucore.cabchalochale.Activity.MainActivity;
 import com.blucore.cabchalochale.R;
 
 
 public class AboutUsFragment extends Fragment {
+    private final static String TAG_FRAGMENT = "TAG_FRAGMENT";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -39,8 +44,28 @@ public class AboutUsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about_us, container, false);
         WebView mywebview = (WebView)view. findViewById(R.id.webView);
         ProgressDialog();
-        mywebview.setWebViewClient(new WebViewClient());
 
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        startActivity(i);
+                        getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
+                       // replaceFragmentWithAnimation(new DashboardFragment());
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+        mywebview.setWebViewClient(new WebViewClient());
         mywebview.loadUrl("http://admin.chalochalecab.com/privacy_policy_chalochalecab.html");
         MainActivity.tvHeaderText.setText("About Us");
         MainActivity.iv_menu.setImageResource(R.drawable.ic_back);
@@ -54,7 +79,6 @@ public class AboutUsFragment extends Fragment {
         });
 
         return view;
-
     }
     public class WebViewClient extends android.webkit.WebViewClient {
         @Override
@@ -71,6 +95,7 @@ public class AboutUsFragment extends Fragment {
             super.onPageFinished(view, url);
             dialog.cancel();
         }
+
     }
     public void ProgressDialog() {
         //Dialog
@@ -88,4 +113,12 @@ public class AboutUsFragment extends Fragment {
         dialog.show();
     }
 
+    public void replaceFragmentWithAnimation(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
     }
+
+
+}

@@ -2,6 +2,7 @@ package com.blucore.cabchalochale.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.blucore.cabchalochale.Activity.MainActivity;
 import com.blucore.cabchalochale.Activity.Utils;
+import com.blucore.cabchalochale.Driver.DriverMainActivity;
 import com.blucore.cabchalochale.R;
 import com.blucore.cabchalochale.extra.Preferences;
 
@@ -47,6 +49,25 @@ public class UserProfileFragment extends Fragment  {
         userContact.setText(preferences.get("contact_no"));
         userFirstName.setText(preferences.get("first_name"));
         userLastName.setText(preferences.get("last_name"));
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        startActivity(i);
+                        getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
+                        //replaceFragmentWithAnimation(new DashboardFragment());
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
 
         tvChange.setOnClickListener(new View.OnClickListener() {

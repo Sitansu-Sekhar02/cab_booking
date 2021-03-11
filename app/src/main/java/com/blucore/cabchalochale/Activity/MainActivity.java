@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,7 +123,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (view.getId()) {
             case R.id.iv_menu:
                 drawer.openDrawer(Gravity.LEFT);
+                view.setFocusableInTouchMode(true);
+                view.requestFocus();
+                view.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View v, int keyCode, KeyEvent event) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                               drawer.closeDrawer(Gravity.LEFT);
+
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                });
+
                 break;
+
         }
     }
 
@@ -217,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dialog.dismiss();
             }
         });
-
 
     }
 

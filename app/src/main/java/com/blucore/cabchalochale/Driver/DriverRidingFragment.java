@@ -1,4 +1,4 @@
-package com.blucore.cabchalochale.Fragments;
+package com.blucore.cabchalochale.Driver;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -31,7 +31,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.blucore.cabchalochale.Activity.MainActivity;
 import com.blucore.cabchalochale.Activity.Utils;
-import com.blucore.cabchalochale.Driver.DriverMainActivity;
+import com.blucore.cabchalochale.Fragments.RidingHistoryDetailsFragment;
+import com.blucore.cabchalochale.Model.DriverRideModel;
 import com.blucore.cabchalochale.Model.YourRideModel;
 import com.blucore.cabchalochale.R;
 import com.blucore.cabchalochale.extra.Preferences;
@@ -47,10 +48,10 @@ import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
-public class YourRidingFragment extends Fragment {
+public class DriverRidingFragment extends Fragment {
     View v;
-    private List<YourRideModel> rideModels;
-    public static final String riding_history = "https://admin.chalochalecab.com/Webservices/getUsersData.php";
+    private List<DriverRideModel> rideModels;
+    public static final String riding_history = "https://admin.chalochalecab.com/Webservices/driverRideHistory.php";
 
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
@@ -73,6 +74,19 @@ public class YourRidingFragment extends Fragment {
        // ArrayList source = new ArrayList<>(Arrays.asList("Auto"));
         preferences=new Preferences(getActivity());
 
+
+        //setvalue
+        DriverMainActivity.tvHeaderText.setText("Your Rides");
+        DriverMainActivity.iv_menu.setImageResource(R.drawable.ic_back);
+        DriverMainActivity.iv_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), DriverMainActivity.class);
+                startActivity(i);
+                getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
+            }
+        });
+
         v.setFocusableInTouchMode(true);
         v.requestFocus();
         v.setOnKeyListener(new View.OnKeyListener() {
@@ -80,7 +94,7 @@ public class YourRidingFragment extends Fragment {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event.getAction() == KeyEvent.ACTION_DOWN) {
                     if (keyCode == KeyEvent.KEYCODE_BACK) {
-                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        Intent i = new Intent(getActivity(), DriverMainActivity.class);
                         startActivity(i);
                         getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
                         //replaceFragmentWithAnimation(new DashboardFragment());
@@ -89,18 +103,6 @@ public class YourRidingFragment extends Fragment {
                     }
                 }
                 return false;
-            }
-        });
-
-        //setvalue
-        MainActivity.tvHeaderText.setText("Your Rides");
-        MainActivity.iv_menu.setImageResource(R.drawable.ic_back);
-        MainActivity.iv_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                startActivity(i);
-                getActivity().overridePendingTransition(R.anim.slide_left, R.anim.slide_right);
             }
         });
         if (Utils.isNetworkConnectedMainThred(getActivity())) {
@@ -119,11 +121,6 @@ public class YourRidingFragment extends Fragment {
         recyclerView=v.findViewById(R.id.recyclerView);
         empty=v.findViewById(R.id.empty);
         llcartItem=v.findViewById(R.id.llcartItem);
-
-        //set adapter
-       /* layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(new YourRideAdapter());*/
 
         return v;
     }
@@ -147,42 +144,30 @@ public class YourRidingFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 dialog.cancel();
-                Log.e("riding_history", response);
+                Log.e("DriverRiding_history", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     if (jsonObject.getString("success").equalsIgnoreCase("true")) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("userData");
+                        JSONArray jsonArray = jsonObject.getJSONArray("driverRides");
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject Object = jsonArray.getJSONObject(i);
                             //model class
-                            YourRideModel rideList = new YourRideModel();
-                            //String id = Object.getString("id");
-                            String source = Object.getString("from_add");
-                            String destination = Object.getString("to_add");
-                            //String driver_id=Object.getString("driver_id");
-                            //Log.e("id_driv",""+driver_id);
-                            String journey_date = Object.getString("dateTime");
-                            String price = Object.getString("total_price");
-                            //String vehicle_company=Object.getString("vehicle_compony");
-                            String cab_image = "http://admin.chalochalecab.com/" + Object.getString("vehicle_image");
-                            String driver_image ="http://admin.chalochalecab.com/" + Object.getString("driver_image");
-
-                            String cab_number = Object.getString("vehicle_no");
-                            String driver_name = Object.getString("driver_name");
-                            String driver_number = Object.getString("driverMobileNo");
+                            DriverRideModel rideList = new DriverRideModel();
+                            String source = Object.getString("from_address");
+                            String destination = Object.getString("to_address");
+                            String journey_date = Object.getString("date");
+                            String price = Object.getString("price");
+                            String user_number = Object.getString("customer_mobile_no");
+                            String payment_mode = Object.getString("payment_method");
 
 
-                            //cabList.setCab_id(id);
                             rideList.setSource(source);
                             rideList.setDestination(destination);
-                            rideList.setCab_image(cab_image);
                             rideList.setJouney_date(journey_date);
                             rideList.setCab_price("\u20b9"+price);
-                            rideList.setCab_number(cab_number);
-                            rideList.setDriver_image(driver_image);
-                            rideList.setDriver_name(driver_name);
-                            rideList.setDriver_number(driver_number);
+                            rideList.setUser_number(user_number);
+                            rideList.setPayment_mode(payment_mode);
                             rideModels.add(rideList);
                         }
                         setAdapter();
@@ -213,8 +198,7 @@ public class YourRidingFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> parameters = new HashMap<String, String>();
-                parameters.put("user_id",preferences.get("user_id"));
-                //parameters.put("id", String.valueOf(166));
+                parameters.put("mobile_no",preferences.get("contact_no"));
                 return parameters;
             }
         };
@@ -230,73 +214,37 @@ public class YourRidingFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    public void replaceFragmentWithAnimation(Fragment fragment, String driver_name, String driver_number, String journey_date, String cab_image,String driver_image,String price) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
-        Bundle bundle = new Bundle();
-        bundle.putString("driver_name",driver_name);
-        bundle.putString("driverMobileNo",driver_number);
-        bundle.putString("dateTime",journey_date);
-        bundle.putString("vehicle_image",cab_image);
-        bundle.putString("driver_image",driver_image);
-        bundle.putString("total_price",price);
-
-        //bundle.putString("order_date_month",);
-        fragment.setArguments(bundle);
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-
     //=============================Adapter====================================================//
 
 
     public class YourRideAdapter extends  RecyclerView.Adapter<YourRideAdapter.ViewHolder> {
         //ArrayList source;
-        private List<YourRideModel> mModel;
+        private List<DriverRideModel> mModel;
         Context context;
 
       //  ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 
-        public YourRideAdapter(List<YourRideModel> mModel, Context context) {
+        public YourRideAdapter(List<DriverRideModel> mModel, Context context) {
             this.mModel = mModel;
             this.context = context;
         }
 
-        /* public YourRideAdapter(ArrayList<HashMap<String, String>> favList) {
-                    data = favList;
-                }
 
-                public YourRideAdapter() {
-
-                }
-        */
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_userriding, parent, false));
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.driver_riding_history, parent, false));
 
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
             holder.Date.setText(mModel.get(position).getJouney_date());
-            holder.Cab_no.setText(mModel.get(position).getCab_number());
             holder.total_price.setText(mModel.get(position).getCab_price());
+            holder.payment_mode.setText(mModel.get(position).getPayment_mode());
+            holder.user_no.setText(mModel.get(position).getUser_number());
             holder.source.setText(mModel.get(position).getSource());
             holder.destination.setText(mModel.get(position).getDestination());
 
-            holder.rlmain.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String driver_name=mModel.get(position).getDriver_name();
-                    String driver_number=mModel.get(position).getDriver_number();
-                    String journey_date=mModel.get(position).getJouney_date();
-                    String cab_image=mModel.get(position).getCab_image();
-                    String driver_image=mModel.get(position).getDriver_image();
-                    String price=mModel.get(position).getCab_price();
 
-
-                    replaceFragmentWithAnimation(new RidingHistoryDetailsFragment(),driver_name,driver_number,journey_date,cab_image,driver_image,price);
-                }
-            });
         }
 
 
@@ -313,20 +261,20 @@ public class YourRidingFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             TextView Date;
-            TextView Cab_no;
+            TextView user_no;
             TextView total_price;
             TextView source;
             TextView destination;
-            LinearLayout rlmain;
+            TextView payment_mode;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 Date = (TextView) itemView.findViewById(R.id.date);
-                Cab_no = (TextView) itemView.findViewById(R.id.cab_no);
+                user_no = (TextView) itemView.findViewById(R.id.user_no);
                 total_price = (TextView) itemView.findViewById(R.id.total_price);
                 source = (TextView) itemView.findViewById(R.id.source_address);
                 destination = (TextView) itemView.findViewById(R.id.dest_address);
-                rlmain = itemView.findViewById(R.id.rlmain);
+                payment_mode = (TextView) itemView.findViewById(R.id.payment_mode);
 
             }
         }

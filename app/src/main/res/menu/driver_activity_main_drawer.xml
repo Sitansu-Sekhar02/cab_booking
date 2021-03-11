@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_rides"
+        android:icon="@drawable/ic_history"
+        android:title="Your Rides" />
     <item
         android:id="@+id/nav_support"
         android:icon="@drawable/ic_football"
         android:title="@string/support" />
-    <item
+     <item
         android:id="@+id/nav_about"
         android:icon="@drawable/ic_about"
         android:title="@string/aboutus" />

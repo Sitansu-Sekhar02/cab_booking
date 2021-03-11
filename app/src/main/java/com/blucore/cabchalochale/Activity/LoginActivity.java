@@ -263,6 +263,13 @@ public class LoginActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
 
+               /* if (otpTextView.getOtpListener()) {
+
+
+                }else{
+
+                }*/
+
                 if (Utils.isNetworkConnectedMainThred(LoginActivity.this)) {
                     //ProgressForSignup();
                     //dialog.show();
@@ -271,6 +278,8 @@ public class LoginActivity extends AppCompatActivity  {
                 } else {
                     Toasty.error(LoginActivity.this, "No Internet Connection!", Toast.LENGTH_SHORT).show();
                 }
+
+
 
             }
         });
