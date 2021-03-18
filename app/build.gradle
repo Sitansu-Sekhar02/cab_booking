@@ -9,8 +9,8 @@ android {
         applicationId "com.blucore.cabchalochale"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 12
-        versionName "2.3"
+        versionCode 13
+        versionName "2.4"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -23,7 +23,8 @@ android {
         }
 
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }

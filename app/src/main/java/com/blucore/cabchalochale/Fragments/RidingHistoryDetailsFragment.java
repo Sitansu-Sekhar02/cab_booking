@@ -3,6 +3,7 @@ package com.blucore.cabchalochale.Fragments;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,11 +13,14 @@ import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +52,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +74,10 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
     TextView driverName;
     TextView driverNumber;
     TextView journeyDate;
+    TextView journeyFrom;
+    TextView journeyTo;
+    Button shareRides;
+
     ImageView vehicleImage;
     ImageView driver_images;
     TextView prices;
@@ -95,6 +106,19 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
         vehicleImage=v.findViewById(R.id.vehicle_image);
         driver_images=v.findViewById(R.id.driver_image);
         prices=v.findViewById(R.id.price);
+        journeyFrom=v.findViewById(R.id.from_ads);
+        journeyTo=v.findViewById(R.id.to_ads);
+        shareRides=v.findViewById(R.id.shareRides);
+
+
+        shareRides.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareit();
+            }
+        });
+
+
 
 
         preferences=new Preferences(getActivity());
@@ -113,12 +137,16 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
         String cab_image=b.getString("vehicle_image");
         String driver_image=b.getString("driver_image");
         String price=b.getString("total_price");
+        String from_ads=b.getString("from_addrs");
+        String to_ads=b.getString("to_addrs");
 
 
         driverName.setText(name);
         driverNumber.setText(driver_number);
         journeyDate.setText(journey_date);
         prices.setText(price);
+        journeyFrom.setText(from_ads);
+        journeyTo.setText(to_ads);
 
 
         Glide.with(this)
@@ -129,6 +157,55 @@ public class RidingHistoryDetailsFragment extends Fragment implements OnMapReady
                 .into(driver_images);
 
         return v;
+    }
+
+    private void shareit() {
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            // Do the file write
+            Date now = new Date();
+            android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+
+            try {
+                // image naming and path  to include sd card  appending name you choose for file
+                String mPath = Environment.getExternalStorageDirectory().toString() + "/" +now+ "" + ".jpg";
+
+                // create bitmap screen capture
+                View v1 = getActivity().getWindow().getDecorView().getRootView();
+                v1.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+                v1.setDrawingCacheEnabled(false);
+
+                File imageFile = new File(mPath);
+
+                FileOutputStream outputStream = new FileOutputStream(imageFile);
+                int quality = 100;
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+                outputStream.flush();
+                outputStream.close();
+
+                openScreenshot(imageFile);
+
+            } catch (Throwable e) {
+                // Several error may come out with file handling or DOM
+                e.printStackTrace();
+            }
+        } else {
+            // Request permission from the user
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+        }
+    }
+
+    private void openScreenshot(File imageFile) {
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        Uri uri = Uri.fromFile(imageFile);
+        sharingIntent.setType("image/*");
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(sharingIntent, "Share Image Using"));
+
+
     }
 
     @Override

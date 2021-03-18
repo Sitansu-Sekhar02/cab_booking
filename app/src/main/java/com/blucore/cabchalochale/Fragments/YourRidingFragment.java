@@ -230,7 +230,7 @@ public class YourRidingFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    public void replaceFragmentWithAnimation(Fragment fragment, String driver_name, String driver_number, String journey_date, String cab_image,String driver_image,String price) {
+    public void replaceFragmentWithAnimation(Fragment fragment, String driver_name, String driver_number, String journey_date, String cab_image, String driver_image, String price, String from_ads, String to_ads) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left);
         Bundle bundle = new Bundle();
@@ -240,8 +240,8 @@ public class YourRidingFragment extends Fragment {
         bundle.putString("vehicle_image",cab_image);
         bundle.putString("driver_image",driver_image);
         bundle.putString("total_price",price);
-
-        //bundle.putString("order_date_month",);
+        bundle.putString("from_addrs",from_ads);
+        bundle.putString("to_addrs",to_ads);
         fragment.setArguments(bundle);
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
@@ -292,11 +292,16 @@ public class YourRidingFragment extends Fragment {
                     String cab_image=mModel.get(position).getCab_image();
                     String driver_image=mModel.get(position).getDriver_image();
                     String price=mModel.get(position).getCab_price();
+                    String from_ads=mModel.get(position).getSource();
+                    String to_ads=mModel.get(position).getDestination();
 
 
-                    replaceFragmentWithAnimation(new RidingHistoryDetailsFragment(),driver_name,driver_number,journey_date,cab_image,driver_image,price);
+
+
+                    replaceFragmentWithAnimation(new RidingHistoryDetailsFragment(),driver_name,driver_number,journey_date,cab_image,driver_image,price,from_ads,to_ads);
                 }
             });
+
         }
 
 

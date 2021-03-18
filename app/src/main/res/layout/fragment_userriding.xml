@@ -11,12 +11,14 @@
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/_4sdp"
         android:layout_marginRight="@dimen/_4sdp">
+
         <RelativeLayout
             android:layout_marginTop="@dimen/_5sdp"
             android:background="#ffffff"
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:id="@+id/lnrdate"
                 android:layout_width="match_parent"
@@ -33,19 +35,29 @@
             <TextView
                 android:id="@+id/date"
                 android:gravity="center_vertical"
-                android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:text="12.7.21,04.56"
                 android:layout_height="wrap_content"/>
             <TextView
                 android:id="@+id/total_price"
                 android:layout_marginLeft="@dimen/_50sdp"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:text="\u20B9 35"
                 android:textStyle="bold"
                 android:textColor="#000"
                 android:textSize="@dimen/_20sdp"
                 android:layout_height="wrap_content"/>
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tvShare"
+                    android:layout_width="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_30sdp"
+                    android:background="@drawable/ic_baseline_share_24"
+                    android:layout_height="wrap_content"/>
+
+
         </LinearLayout>
             <LinearLayout
                 android:layout_below="@+id/lnrdate"
@@ -64,7 +76,6 @@
                     android:id="@+id/cab_no"
                     android:gravity="center_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/_15sdp"
                     android:text="CRN 564345373"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
@@ -198,6 +209,7 @@
 
 
     </LinearLayout>
+
    <!-- <View
         android:layout_width="match_parent"
         android:background="#000"

@@ -30,7 +30,9 @@
         android:roundIcon="@drawable/iconfinal"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
+
         <receiver android:name="com.blucore.cabchalochale.Driver.BroadcastReceiver"/>
 
         <uses-library
